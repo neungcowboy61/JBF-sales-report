@@ -256,105 +256,174 @@ body.em .sec-toolbar{display:flex;}
 .color-sel{font-size:10px;padding:2px 4px;border-radius:4px;border:1px solid var(--gray3);cursor:pointer;font-family:var(--font);}
 
 @media print{
-  /* ── Reset layout for print ── */
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-  body{background:#fff!important;padding:0!important;margin:0!important;font-size:11px!important;}
-  .page{max-width:100%!important;margin:0!important;padding:0 8px!important;}
+  /* ── หน้ากระดาษ A4 แนวนอน ── */
+  @page{ size:A4 landscape; margin:8mm 8mm 10mm 8mm; }
+  @page:first{ margin-top:6mm; }
 
-  /* ── Hide all UI controls ── */
+  *{ -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; box-sizing:border-box; }
+
+  body{ background:#fff!important; padding:0!important; margin:0!important; }
+  .page{ max-width:100%!important; margin:0!important; padding:0!important; }
+
+  /* ── ซ่อน UI ทั้งหมด ── */
   .topbar,.upload-bar,.tabs,#edit-badge,
   .sec-toolbar,.card-em-bar,.kcard-em-bar,
   .add-row-wrap,.del-btn,.del-row-btn,.add-row-btn,
-  .qe-btn,.del-btn,.ra{display:none!important;}
+  .qe-btn,.ra,.color-sel,
+  .pdf-footer{ display:none!important; }
 
-  /* ── Show ALL sections ── */
-  .sec{display:block!important;}
+  /* ── ซ่อน header เดิม (จะใช้ mini-header ใน JS แทน) ── */
+  .hdr{ display:none!important; }
 
-  /* ── Section separators ── */
-  .sec{
-    border-top:2px solid #1a237e;
-    padding-top:10px;
-    margin-top:0;
+  /* ── แสดงทุก section ── */
+  .sec{ display:block!important; }
+
+  /* ── Section แรกไม่ขึ้นหน้าใหม่ (รวมกับ header) ── */
+  .sec{ page-break-before:always; break-before:page; padding:0; margin:0; }
+  #s1{ page-break-before:avoid!important; break-before:avoid!important; }
+
+  /* ── ป้องกันตัดข้ามหน้ากลางการ์ด ── */
+  .card{ page-break-inside:avoid; break-inside:avoid; margin-bottom:4px!important; padding:6px 8px!important; }
+  .kcard{ page-break-inside:avoid; break-inside:avoid; }
+  .kgrid{ page-break-inside:avoid; break-inside:avoid; }
+  .abox{ page-break-inside:avoid; break-inside:avoid; }
+  .pgrow{ page-break-inside:avoid; break-inside:avoid; }
+  .qbox{ page-break-inside:avoid; break-inside:avoid; }
+  tr{ page-break-inside:avoid; break-inside:avoid; }
+
+  /* ══ MINI HEADER (สร้างโดย JS ทุกหน้า) ══ */
+  .pdf-hdr{
+    display:flex!important;
+    background:#1a237e!important; color:#fff!important;
+    border-radius:5px; padding:5px 10px; margin-bottom:5px;
+    justify-content:space-between; align-items:center;
+    flex-wrap:nowrap; gap:8px;
   }
-  .sec:first-of-type{border-top:none;}
+  .pdf-hdr-left .pdf-hdr-title{
+    font-size:10px!important; font-weight:700; color:#fff!important; line-height:1.3;
+  }
+  .pdf-hdr-left .pdf-hdr-sub{
+    font-size:7.5px!important; opacity:.8; color:#fff!important; margin-top:1px;
+  }
+  .pdf-hdr-chips{ display:flex!important; gap:4px; flex-shrink:0; }
+  .pdf-hdr-chip{
+    background:rgba(255,255,255,.15)!important;
+    border:1px solid rgba(255,255,255,.25)!important;
+    border-radius:4px; padding:2px 7px; text-align:center; min-width:60px;
+  }
+  .pdf-hdr-chip .lbl{ font-size:6.5px!important; opacity:.8; display:block; }
+  .pdf-hdr-chip .val{ font-size:11px!important; font-weight:700; display:block; line-height:1.2; }
 
-  /* ── Page breaks ── */
-  .sec{page-break-before:always;}
-  .sec:first-of-type{page-break-before:avoid;}
-  .card{page-break-inside:avoid;}
-  .kgrid{page-break-inside:avoid;}
-
-  /* ── Section title label ── */
+  /* ══ SECTION TITLE ══ */
   .pdf-sec-title{
     display:block!important;
-    font-size:13px;font-weight:700;color:#1a237e;
-    margin-bottom:8px;padding-bottom:4px;
+    font-size:10px!important; font-weight:700; color:#1a237e;
+    padding:2px 0 3px; margin-bottom:4px;
     border-bottom:1.5px solid #1a237e;
   }
 
-  /* ── Header stays on first page ── */
-  .hdr{
-    background:#1a237e!important;color:#fff!important;
-    border-radius:6px;padding:10px 16px;margin-bottom:8px;
-    display:flex!important;justify-content:space-between;
-    align-items:center;flex-wrap:wrap;gap:8px;
+  /* ══ KPI GRID ══ */
+  .kgrid{
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:4px!important; margin-bottom:4px!important;
   }
-  .hdr-chip{
-    background:rgba(255,255,255,.15)!important;
-    border:1px solid rgba(255,255,255,.3)!important;
+  .kcard{ padding:5px 7px!important; border-left-width:3px!important; }
+  .kcard.red{ border-left-color:#e53935!important; }
+  .kcard.amber{ border-left-color:#fb8c00!important; }
+  .kcard.green{ border-left-color:#43a047!important; }
+  .kcard.blue{ border-left-color:#1976d2!important; }
+  .klabel{ font-size:7px!important; margin-bottom:1px!important; }
+  .kval{ font-size:15px!important; line-height:1.1!important; }
+  .ksub{ font-size:7px!important; margin-top:1px!important; }
+  .kpct{ font-size:8px!important; }
+
+  /* ══ PRODUCT GROUP BARS ══ */
+  .pgrow{ padding:3px 5px!important; margin-bottom:2px!important; gap:5px!important; }
+  .pgdot{ width:7px!important; height:7px!important; flex-shrink:0; }
+  .pgname{ font-size:8px!important; width:120px!important; flex-shrink:0; }
+  .pgbars .barbg{ height:5px!important; margin-top:1px!important; }
+  .pgnum{ font-size:7px!important; width:90px!important; }
+  .pgpct{ font-size:8px!important; width:42px!important; }
+
+  /* ══ Q GRID ══ */
+  .qgrid{ grid-template-columns:repeat(2,1fr)!important; gap:4px!important; }
+  .qbox{ padding:5px 7px!important; }
+  .qnum{ font-size:13px!important; }
+  .qlabel{ font-size:7.5px!important; }
+  .qtext{ font-size:7.5px!important; line-height:1.5!important; margin-top:2px!important; }
+
+  /* ══ SECTION LABELS / SHEADS ══ */
+  .slabel{ font-size:6.5px!important; margin:4px 0 2px!important; }
+  .shead{ font-size:8.5px!important; padding-bottom:4px!important; margin-bottom:4px!important; }
+
+  /* ══ ABOX ══ */
+  .abox{ padding:4px 7px!important; margin-bottom:3px!important; border-left-width:3px!important; }
+  .abox{ background:#ffebee!important; border-left-color:#e53935!important; }
+  .abox.amber{ background:#fff8e1!important; border-left-color:#fb8c00!important; }
+  .abox.green{ background:#e8f5e9!important; border-left-color:#43a047!important; }
+  .abox.blue{ background:#e3f2fd!important; border-left-color:#1976d2!important; }
+  .atitle{ font-size:7.5px!important; margin-bottom:2px!important; }
+  .atext{ font-size:7.5px!important; line-height:1.5!important; }
+
+  /* ══ TAGS ══ */
+  .tags{ gap:3px!important; margin-top:3px!important; }
+  .tag{ font-size:6.5px!important; padding:1px 5px!important; }
+  .to{ background:#e3f2fd!important; color:#0d47a1!important; }
+  .td{ background:#fff8e1!important; color:#e65100!important; }
+  .ti{ background:#ffebee!important; color:#c62828!important; }
+  .tg{ background:#e8f5e9!important; color:#1b5e20!important; }
+
+  /* ══ TABLES ══ */
+  .tmtable{ font-size:7.5px!important; width:100%!important; border-collapse:collapse!important; }
+  .tmtable th{
+    background:#1a237e!important; color:#fff!important;
+    font-size:7px!important; padding:3px 4px!important;
+    white-space:nowrap;
   }
-  .hdr-chip b{font-size:13px!important;}
-
-  /* ── Tables ── */
-  .tmtable th{background:#1a237e!important;color:#fff!important;font-size:9px!important;padding:5px 6px!important;}
-  .tmtable td{font-size:9px!important;padding:4px 6px!important;}
-  .debt-table th{background:#283593!important;color:#fff!important;font-size:9px!important;padding:5px 6px!important;}
-  .debt-table td{font-size:9px!important;padding:4px 6px!important;}
-
-  /* ── KPI cards keep left-border color ── */
-  .kcard{border-left-width:3px!important;}
-  .kcard.red{border-left-color:#e53935!important;}
-  .kcard.amber{border-left-color:#fb8c00!important;}
-  .kcard.green{border-left-color:#43a047!important;}
-  .kcard.blue{border-left-color:#1976d2!important;}
-
-  /* ── Bars keep colors ── */
-  .bf-red{background:#e53935!important;}
-  .bf-amber{background:#fb8c00!important;}
-  .bf-green{background:#43a047!important;}
-  .tbl-bar-bg{background:#eceff1!important;}
-
-  /* ── Pills / badges keep colors ── */
-  .pill,.badge{-webkit-print-color-adjust:exact!important;}
-  .p-red{background:#ffebee!important;color:#c62828!important;}
-  .p-amber{background:#fff8e1!important;color:#e65100!important;}
-  .p-green{background:#e8f5e9!important;color:#1b5e20!important;}
-  .br{background:#ffebee!important;color:#c62828!important;}
-  .ba{background:#fff8e1!important;color:#e65100!important;}
-  .bg{background:#e8f5e9!important;color:#1b5e20!important;}
-  .bb{background:#e3f2fd!important;color:#0d47a1!important;}
-
-  /* ── abox colors ── */
-  .abox{background:#ffebee!important;border-left-color:#e53935!important;}
-  .abox.amber{background:#fff8e1!important;border-left-color:#fb8c00!important;}
-  .abox.green{background:#e8f5e9!important;border-left-color:#43a047!important;}
-  .abox.blue{background:#e3f2fd!important;border-left-color:#1976d2!important;}
-
-  /* ── Remove editable underlines ── */
-  [contenteditable="true"]{border-bottom:none!important;}
-
-  /* ── PDF watermark / footer ── */
-  .pdf-footer{
-    display:block!important;
-    position:fixed;bottom:6px;left:0;right:0;
-    text-align:center;font-size:8px;color:#90a4ae;
-    border-top:0.5px solid #cfd8dc;padding-top:4px;
+  .tmtable td{ font-size:7.5px!important; padding:2px 4px!important; }
+  .debt-table{ font-size:7.5px!important; width:100%!important; border-collapse:collapse!important; }
+  .debt-table th{
+    background:#283593!important; color:#fff!important;
+    font-size:7px!important; padding:3px 4px!important;
   }
-  /* ── Tag colors ── */
-  .to{background:#e3f2fd!important;color:#0d47a1!important;}
-  .td{background:#fff8e1!important;color:#e65100!important;}
-  .ti{background:#ffebee!important;color:#c62828!important;}
-  .tg{background:#e8f5e9!important;color:#1b5e20!important;}
+  .debt-table td{ font-size:7.5px!important; padding:2px 4px!important; }
+
+  /* ══ BARS IN TABLE ══ */
+  .tbl-bar-bg{ background:#eceff1!important; height:5px!important; }
+  .tbl-bar-fill{ height:5px!important; }
+  .bf-red{ background:#e53935!important; }
+  .bf-amber{ background:#fb8c00!important; }
+  .bf-green{ background:#43a047!important; }
+
+  /* ══ PILLS / BADGES ══ */
+  .pill{ font-size:6.5px!important; padding:1px 4px!important; }
+  .badge{ font-size:6.5px!important; padding:1px 4px!important; }
+  .p-red{ background:#ffebee!important; color:#c62828!important; }
+  .p-amber{ background:#fff8e1!important; color:#e65100!important; }
+  .p-green{ background:#e8f5e9!important; color:#1b5e20!important; }
+  .br{ background:#ffebee!important; color:#c62828!important; }
+  .ba{ background:#fff8e1!important; color:#e65100!important; }
+  .bg{ background:#e8f5e9!important; color:#1b5e20!important; }
+  .bb{ background:#e3f2fd!important; color:#0d47a1!important; }
+
+  /* ══ STRATEGY ══ */
+  .strat-item{ padding:3px 0!important; gap:6px!important; }
+  .strat-num{ min-width:22px!important; height:18px!important; font-size:8px!important; }
+  .strat-title{ font-size:8px!important; margin-bottom:1px!important; }
+  .strat-text{ font-size:7.5px!important; line-height:1.4!important; }
+
+  /* ══ ROW / COL LAYOUT ══ */
+  .row{ display:flex!important; gap:5px!important; }
+  .col{ flex:1!important; min-width:0!important; }
+
+  /* ══ FOOTER TEXT ══ */
+  .foot{ padding:5px 8px!important; margin-top:4px!important; }
+  .foot-txt{ font-size:7px!important; }
+  .foot-bs .badge{ font-size:6px!important; }
+
+  /* ══ remove contenteditable style ══ */
+  [contenteditable="true"]{ border-bottom:none!important; cursor:default!important; }
 }
 </style>
 </head>
@@ -1246,23 +1315,19 @@ function saveAll() {
 }
 
 function loadAll() {
-  // อ่าน baked data ก่อน (จากไฟล์ที่แชร์ผ่าน GitHub)
-  // ถ้าไม่มีค่อยใช้ localStorage (แก้ไขในเครื่องตัวเอง)
-  var snap = window.__BAKED__ || null;
-  if (!snap) {
-    try { var r = localStorage.getItem(SK); if (r) snap = JSON.parse(r); } catch(e) {}
-  }
-  if (!snap) return;
+  const raw = localStorage.getItem(SK);
+  if (!raw) return;
   try {
-    ['s1','s2','s3','s4','s5','s6','s7','foot-badges'].forEach(function(id) {
-      var el = document.getElementById(id);
+    const snap = JSON.parse(raw);
+    ['s1','s2','s3','s4','s5','s6','s7','foot-badges'].forEach(id => {
+      const el = document.getElementById(id);
       if (el && snap['_html_'+id]) el.innerHTML = snap['_html_'+id];
     });
-    document.querySelectorAll('[data-e]').forEach(function(el, i) {
-      var key = el.id || ('_e_'+i);
+    document.querySelectorAll('[data-e]').forEach((el, i) => {
+      const key = el.id || ('_e_'+i);
       if (snap[key] !== undefined) el.innerHTML = snap[key];
     });
-  } catch(e) {}
+  } catch(e) { console.warn('load err', e); }
 }
 
 function showInd(msg, color) {
@@ -1279,79 +1344,75 @@ function showInd(msg, color) {
    → อัปโหลด GitHub แล้วส่ง Link ได้ทันที ทุกคนเห็นข้อมูลเดียวกัน
 ══════════════════════════════════════════════════════════ */
 function exportHTML() {
-  // 1. บันทึกข้อมูลปัจจุบันลง localStorage ก่อน
+  // Step 1: save latest edits
   saveAll();
 
-  // 2. อ่าน JSON snapshot จาก localStorage
-  var raw = localStorage.getItem(SK);
-  if (!raw) {
-    alert('กรุณาบันทึกข้อมูลก่อนครับ (กดปุ่ม บันทึก)');
-    return;
-  }
+  // Step 2: clone full DOM
+  const clone = document.documentElement.cloneNode(true);
+  const cloneBody = clone.querySelector('body');
+  const cloneHead = clone.querySelector('head');
 
-  // 3. เข้ารหัส JSON → base64 (รองรับภาษาไทยและ special chars ทุกตัว)
-  var b64 = '';
-  try {
-    b64 = btoa(unescape(encodeURIComponent(raw)));
-  } catch(e) {
-    alert('เข้ารหัสข้อมูลไม่สำเร็จ: ' + e.message);
-    return;
-  }
+  // Step 3: remove runtime UI from clone
+  ['#edit-badge'].forEach(sel => {
+    const el = clone.querySelector(sel);
+    if (el) el.remove();
+  });
 
-  // 4. อ่าน HTML ปัจจุบันทั้งหน้าโดยตรง
-  //    ไม่ต้อง clone DOM — ใช้ outerHTML ได้เลย
-  var htmlOut = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  // Step 4: ensure body starts unlocked (no .em class)
+  cloneBody.classList.remove('em');
 
-  // 5. ลบ baked script เก่าออก (ถ้ามี)
-  htmlOut = htmlOut.replace(/<script id="__baked__"[\s\S]*?<\/script>/g, '');
+  // Step 5: bake current section HTML directly into clone's DOM
+  const SECTIONS = ['s1','s2','s3','s4','s5','s6','s7','foot-badges'];
+  SECTIONS.forEach(id => {
+    const live = document.getElementById(id);
+    const cloned = clone.getElementById(id);
+    if (live && cloned) cloned.innerHTML = live.innerHTML;
+  });
 
-  // 6. ลบ edit-badge floating element
-  htmlOut = htmlOut.replace(/<div id="edit-badge"[\s\S]*?<\/div>/, '');
+  // Step 6: bake individual [data-e] values into clone
+  const liveEdits = document.querySelectorAll('[data-e]');
+  const cloneEdits = clone.querySelectorAll('[data-e]');
+  liveEdits.forEach((el, i) => {
+    if (cloneEdits[i]) cloneEdits[i].innerHTML = el.innerHTML;
+  });
 
-  // 7. เอา class em ออกจาก body tag
-  htmlOut = htmlOut.replace(/(<body\b[^>]*)\s+class="em"/, '$1');
-  htmlOut = htmlOut.replace(/(<body\b[^>]*)\s+class="em\s/, '$1 class="');
+  // Step 7: remove any existing baked-data script to avoid duplication
+  const oldBaked = clone.getElementById('baked-data-script');
+  if (oldBaked) oldBaked.remove();
 
-  // 8. สร้าง baked script — ฝัง base64 data ที่จะถูกอ่านตอนเปิดไฟล์
-  var bakedScript = [
-    '<script id="__baked__">',
-    '(function(){',
-    '  try{',
-    '    var d=decodeURIComponent(escape(atob("' + b64 + '")));',
-    '    window.__BAKED__=JSON.parse(d);',
-    '  }catch(e){ console.error("baked-load:",e); }',
-    '})();',
-    '<\/script>'
-  ].join('\n');
+  // Step 8: remove the old localStorage-seeding script approach
+  //         Instead, disable loadAll in the exported file so baked HTML IS the data
+  //         We inject a tiny override that clears localStorage on first load
+  //         so the baked content always shows
+  const clearScript = document.createElement('script');
+  clearScript.id = 'baked-data-script';
+  clearScript.textContent = `
+/* ── Baked Dashboard — exported ${new Date().toLocaleString('th-TH')} ──
+   ข้อมูลทุกส่วนถูกฝังโดยตรงในไฟล์นี้แล้ว
+   localStorage จะถูก clear ออกเพื่อให้ข้อมูล baked นี้แสดงเสมอ ── */
+(function() {
+  try { localStorage.removeItem('jbf_v3'); } catch(e) {}
+})();
+`;
+  cloneHead.appendChild(clearScript);
 
-  // 9. แทรก baked script ก่อน </head>
-  if (htmlOut.indexOf('</head>') === -1) {
-    alert('ไม่พบ </head> ในไฟล์');
-    return;
-  }
-  htmlOut = htmlOut.replace('</head>', bakedScript + '\n</head>');
+  // Step 9: serialize to HTML string
+  const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
 
-  // 10. Download ไฟล์
-  var chip = document.querySelector('.hdr-chip b');
-  var month = chip
-    ? chip.textContent.trim().replace(/[\s\/\\]/g, '_')
-    : new Date().toISOString().slice(0, 7);
+  // Step 10: download file
+  const month = (() => {
+    const chip = document.querySelector('.hdr-chip b');
+    return chip ? chip.textContent.trim().replace(/\s/g,'_') : new Date().toISOString().slice(0,7);
+  })();
+  const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `dashboard_JBF_${month}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 
-  try {
-    var blob = new Blob([htmlOut], { type: 'text/html;charset=utf-8' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'dashboard_JBF_' + month + '.html';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function() {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(a.href);
-    }, 500);
-    showInd('\u2705 บันทึกไฟล์สำเร็จ! นำไปอัปโหลด GitHub ได้เลย', '#1b5e20');
-  } catch(e) {
-    alert('ดาวน์โหลดไม่สำเร็จ: ' + e.message);
-  }
+  showInd('🌐 บันทึก HTML เรียบร้อย — พร้อมอัปโหลด GitHub ได้เลย', '#1b5e20');
 }
 
 function exportData() {
@@ -1365,61 +1426,84 @@ function exportData() {
 
 /* ══════ PDF EXPORT ══════ */
 function exportPDF() {
-  // 1. Set print date in footer
-  const dateEl = document.getElementById('pdf-date');
-  if (dateEl) {
-    dateEl.textContent = new Date().toLocaleDateString('th-TH', {
-      year:'numeric', month:'long', day:'numeric',
-      hour:'2-digit', minute:'2-digit'
-    });
-  }
-
-  // 2. Show ALL sections temporarily for print
-  const allSecs = document.querySelectorAll('.sec');
-  const wasActive = [];
-  allSecs.forEach(s => {
-    wasActive.push(s.classList.contains('active'));
-    s.classList.add('active');
+  // ── อัปเดตวันที่ ──
+  var dateEl = document.getElementById('pdf-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('th-TH',{
+    year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'
   });
 
-  // 3. Remove edit mode visuals if active
-  const wasEM = document.body.classList.contains('em');
+  // ── เก็บ state เดิม ──
+  var allSecs  = document.querySelectorAll('.sec');
+  var wasActive = [];
+  allSecs.forEach(function(s){ wasActive.push(s.classList.contains('active')); s.classList.add('active'); });
+  var wasEM = document.body.classList.contains('em');
   document.body.classList.remove('em');
 
-  // 4. Show PDF title in each section
-  document.querySelectorAll('.pdf-sec-title').forEach(el => el.remove());
-  const secLabels = {
-    's1':'1 · KPI & RAG Status',
-    's2':'2 · Root Cause Analysis',
-    's3':'3 · TM Performance',
-    's4':'4 · Pet Food & ค่าใช้จ่าย',
-    's5':'5 · กลยุทธ์ & Action Plan',
-    's6':'6 · ลูกค้าใหม่ & หนี้ค้าง',
-    's7':'7 · Year-on-Year Comparison'
+  // ── ดึงข้อมูล header ──
+  var hdrTitle = (document.querySelector('.hdr-title')||{}).textContent || '';
+  var hdrSub   = (document.querySelector('.hdr-sub')  ||{}).textContent || '';
+  var chipData = [];
+  document.querySelectorAll('.hdr-chip').forEach(function(c){
+    chipData.push({
+      lbl: (c.querySelector('span')||{}).textContent || '',
+      val: (c.querySelector('b')   ||{}).innerHTML   || ''
+    });
+  });
+  function buildHdrHTML(secLabel) {
+    var chips = chipData.map(function(c){
+      return '<div class="pdf-hdr-chip"><span class="lbl">'+c.lbl+'</span><span class="val">'+c.val+'</span></div>';
+    }).join('');
+    return '<div class="pdf-hdr">'
+      + '<div class="pdf-hdr-left">'
+        + '<div class="pdf-hdr-title">'+hdrTitle+'</div>'
+        + '<div class="pdf-hdr-sub">'+hdrSub+'</div>'
+      + '</div>'
+      + '<div class="pdf-hdr-chips">'+chips+'</div>'
+    + '</div>'
+    + '<div class="pdf-sec-title">'+secLabel+'</div>';
+  }
+
+  // ── ลบ element เก่าออก ──
+  document.querySelectorAll('.pdf-hdr,.pdf-sec-title').forEach(function(el){ el.remove(); });
+
+  // ── ใส่ mini-header + section title ทุก section ──
+  var secMap = {
+    's1':'ส่วนที่ 1 — KPI & RAG Status',
+    's2':'ส่วนที่ 2 — Root Cause Analysis',
+    's3':'ส่วนที่ 3 — TM Performance',
+    's4':'ส่วนที่ 4 — Pet Food & ค่าใช้จ่าย',
+    's5':'ส่วนที่ 5 — กลยุทธ์ & Action Plan',
+    's6':'ส่วนที่ 6 — ลูกค้าใหม่ & หนี้ค้าง',
+    's7':'ส่วนที่ 7 — Year-on-Year Comparison'
   };
-  Object.entries(secLabels).forEach(([id, label]) => {
-    const sec = document.getElementById(id);
+  Object.keys(secMap).forEach(function(id){
+    var sec = document.getElementById(id);
     if (!sec) return;
-    const title = document.createElement('div');
-    title.className = 'pdf-sec-title';
-    title.textContent = label;
-    sec.insertBefore(title, sec.firstChild);
+    var wrap = document.createElement('div');
+    wrap.innerHTML = buildHdrHTML(secMap[id]);
+    // แทรกทุก child ของ wrap เข้าต้น sec
+    while (wrap.firstChild) sec.insertBefore(wrap.firstChild, sec.firstChild);
   });
 
-  // 5. Print → PDF
-  setTimeout(() => {
-    window.print();
+  // ── ซ่อน .hdr เดิมชั่วคราว ──
+  var mainHdr = document.querySelector('.hdr');
+  var hdrWas  = mainHdr ? mainHdr.style.display : '';
+  if (mainHdr) mainHdr.style.display = 'none';
 
-    // 6. Restore original state after print dialog closes
-    setTimeout(() => {
-      allSecs.forEach((s, i) => {
+  // ── Print ──
+  setTimeout(function(){
+    window.print();
+    // ── คืนค่าทุกอย่าง ──
+    setTimeout(function(){
+      allSecs.forEach(function(s,i){
         s.classList.remove('active');
         if (wasActive[i]) s.classList.add('active');
       });
       if (wasEM) document.body.classList.add('em');
-      document.querySelectorAll('.pdf-sec-title').forEach(el => el.remove());
-    }, 500);
-  }, 120);
+      if (mainHdr) mainHdr.style.display = hdrWas;
+      document.querySelectorAll('.pdf-hdr,.pdf-sec-title').forEach(function(el){ el.remove(); });
+    }, 1000);
+  }, 300);
 }
 
 function importData() {
