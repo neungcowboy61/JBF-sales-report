@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard ฝ่ายขายและการตลาด — JBF</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+:root{
+  --navy:#1a237e;--navy2:#283593;--navy3:#3949ab;
+  --red:#c62828;--red-bg:#ffebee;--red-b:#e53935;
+  --amber:#e65100;--amber-bg:#fff8e1;--amber-b:#fb8c00;
+  --green:#1b5e20;--green-bg:#e8f5e9;--green-b:#43a047;
+  --blue:#0d47a1;--blue-bg:#e3f2fd;--blue-b:#1976d2;
+  --gray:#f5f6fa;--gray2:#eceff1;--gray3:#cfd8dc;
+  --text:#1a1a2e;--muted:#546e7a;--white:#ffffff;
+  --font:'Sarabun',sans-serif;--mono:'IBM Plex Mono',monospace;
+  --r:10px;--r2:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:#e8eaf0;color:var(--text);font-size:13px;line-height:1.5;padding:20px;}
+.page{max-width:1100px;margin:0 auto;}
+
+/* HEADER */
+.hdr{background:var(--navy);color:#fff;border-radius:var(--r);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap;}
+.hdr-title{font-size:15px;font-weight:700;}
+.hdr-sub{font-size:11px;opacity:.75;margin-top:2px;}
+.hdr-right{display:flex;gap:8px;flex-wrap:wrap;}
+.hdr-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 12px;font-size:11px;text-align:center;line-height:1.6;}
+.hdr-chip b{font-size:16px;font-weight:700;display:block;font-family:var(--mono);}
+
+/* BARS */
+.topbar{background:#fff;border:0.5px solid var(--gray3);border-radius:8px;padding:8px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.upload-bar{background:linear-gradient(135deg,#e8eaf6,#f3e5f5);border:1.5px dashed #7986cb;border-radius:8px;padding:10px 16px;margin-bottom:10px;}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.tab{padding:6px 16px;border-radius:8px;border:1.5px solid var(--gray3);background:var(--white);font-family:var(--font);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s;position:relative;}
+.tab:hover{border-color:var(--navy3);color:var(--navy);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.warn{border-color:var(--red-b);}
+.tab.warn.active{background:var(--red-b);}
+
+/* SECTIONS */
+.sec{display:none;}.sec.active{display:block;}
+.slabel{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin:12px 0 6px;display:flex;align-items:center;gap:6px;}
+
+/* CARDS */
+.card{background:var(--white);border:0.5px solid var(--gray3);border-radius:var(--r);padding:13px 15px;margin-bottom:10px;position:relative;}
+.shead{font-size:12px;font-weight:700;color:var(--text);padding-bottom:8px;margin-bottom:10px;border-bottom:1px solid var(--gray2);}
+
+/* KPI GRID */
+.kgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px;}
+.kcard{background:var(--white);border:0.5px solid var(--gray3);border-radius:var(--r);padding:11px 13px;border-left:4px solid var(--gray3);position:relative;}
+.kcard.red{border-left-color:var(--red-b);}
+.kcard.amber{border-left-color:var(--amber-b);}
+.kcard.green{border-left-color:var(--green-b);}
+.kcard.blue{border-left-color:var(--blue-b);}
+.klabel{font-size:10px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.kval{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--text);line-height:1.1;}
+.ksub{font-size:10px;color:var(--muted);margin-top:3px;}
+.kpct{font-size:11px;font-weight:700;margin-top:2px;font-family:var(--mono);}
+.kpct.red{color:var(--red);}.kpct.amber{color:var(--amber);}.kpct.green{color:var(--green);}
+
+/* BADGES & PILLS */
+.badge{display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;}
+.br{background:var(--red-bg);color:var(--red);}
+.ba{background:var(--amber-bg);color:var(--amber);}
+.bg{background:var(--green-bg);color:var(--green);}
+.bb{background:var(--blue-bg);color:var(--blue);}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:9px;font-weight:700;}
+.p-red{background:var(--red-bg);color:var(--red);}
+.p-amber{background:var(--amber-bg);color:var(--amber);}
+.p-green{background:var(--green-bg);color:var(--green);}
+
+/* PRODUCT GROUP BARS */
+.pgrow{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--gray);border-radius:var(--r2);margin-bottom:5px;position:relative;}
+.pgdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.pgname{font-size:12px;font-weight:600;width:170px;flex-shrink:0;}
+.pgbars{flex:1;}
+.barbg{height:6px;background:var(--gray2);border-radius:3px;overflow:hidden;margin-top:2px;}
+.barfill{height:100%;border-radius:3px;}
+.bf-red{background:var(--red-b);}.bf-amber{background:var(--amber-b);}.bf-green{background:var(--green-b);}
+.pgnum{font-size:10px;color:var(--muted);width:110px;text-align:right;font-family:var(--mono);}
+.pgpct{font-size:12px;font-weight:700;width:52px;text-align:right;font-family:var(--mono);}
+.pgpct.red{color:var(--red);}.pgpct.amber{color:var(--amber);}.pgpct.green{color:var(--green);}
+
+/* TABLES */
+.tmtable{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;}
+.tmtable th{background:var(--navy);color:#fff;padding:7px 8px;text-align:left;font-weight:600;font-size:10px;white-space:nowrap;overflow:hidden;}
+.tmtable th.r{text-align:right;}
+.tmtable td{padding:6px 8px;border-bottom:0.5px solid var(--gray2);vertical-align:middle;overflow:hidden;}
+.tmtable td.r{text-align:right;font-family:var(--mono);white-space:nowrap;}
+.tmtable td.action-col{white-space:normal;word-break:break-word;font-size:10px;color:var(--muted);}
+.tmtable tr:hover td{background:var(--gray);}
+.tmtable tbody tr:last-child td{font-weight:700;background:var(--gray2);}
+/* TM table column widths */
+#tm-table th:nth-child(1),#tm-table td:nth-child(1){width:60px;}
+#tm-table th:nth-child(2),#tm-table td:nth-child(2){width:65px;}
+#tm-table th:nth-child(3),#tm-table td:nth-child(3){width:70px;}
+#tm-table th:nth-child(4),#tm-table td:nth-child(4){width:80px;}
+#tm-table th:nth-child(5),#tm-table td:nth-child(5){width:95px;}
+#tm-table th:nth-child(6),#tm-table td:nth-child(6){width:85px;}
+#tm-table th:nth-child(7),#tm-table td:nth-child(7){width:85px;}
+#tm-table th:nth-child(8),#tm-table td:nth-child(8){width:65px;}
+#tm-table th:nth-child(9),#tm-table td:nth-child(9){width:auto;}
+#tm-table th:nth-child(10),#tm-table td:nth-child(10){width:32px;}
+/* Inline bar inside table */
+.tbl-bar-cell{display:flex;align-items:center;gap:6px;}
+.tbl-bar-bg{flex:1;height:6px;background:var(--gray2);border-radius:3px;overflow:hidden;min-width:60px;}
+.tbl-bar-fill{height:100%;border-radius:3px;}
+.tbl-bar-pct{font-family:var(--mono);font-size:10px;font-weight:700;min-width:42px;text-align:right;flex-shrink:0;}
+/* Debt table */
+.debt-table{width:100%;border-collapse:collapse;font-size:11px;}
+.debt-table th{background:var(--navy2);color:#fff;padding:6px 8px;font-size:10px;font-weight:600;text-align:left;}
+.debt-table td{padding:6px 8px;border-bottom:0.5px solid var(--gray2);vertical-align:middle;}
+.debt-table tr:hover td{background:var(--gray);}
+
+/* ABOX */
+.abox{border-left:3px solid var(--red-b);background:var(--red-bg);border-radius:0 var(--r2) var(--r2) 0;padding:9px 12px;margin-bottom:8px;}
+.abox.amber{border-left-color:var(--amber-b);background:var(--amber-bg);}
+.abox.green{border-left-color:var(--green-b);background:var(--green-bg);}
+.abox.blue{border-left-color:var(--blue-b);background:var(--blue-bg);}
+.atitle{font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px;}
+.atitle.amber{color:var(--amber);}.atitle.green{color:var(--green);}.atitle.blue{color:var(--blue);}
+.atext{font-size:11px;color:var(--muted);line-height:1.7;}
+
+/* TAGS */
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.tag{font-size:9px;border-radius:4px;padding:2px 8px;font-weight:600;}
+.to{background:var(--blue-bg);color:var(--blue);}
+.td{background:var(--amber-bg);color:var(--amber);}
+.ti{background:var(--red-bg);color:var(--red);}
+.tg{background:var(--green-bg);color:var(--green);}
+
+/* Q GRID */
+.qgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.qbox{background:var(--gray);border-radius:var(--r2);padding:10px 12px;position:relative;}
+.qnum{font-size:18px;font-weight:700;color:var(--navy);margin-right:4px;font-family:var(--mono);}
+.qlabel{font-size:10px;font-weight:700;color:var(--muted);}
+.qtext{font-size:11px;color:var(--text);line-height:1.6;margin-top:4px;}
+
+/* ROW/COL */
+.row{display:flex;gap:12px;}.col{flex:1;min-width:0;}
+
+/* STRATEGY */
+.strat-item{display:flex;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--gray2);position:relative;align-items:flex-start;}
+.strat-item:last-of-type{border-bottom:none;}
+.strat-num{min-width:32px;height:24px;border-radius:12px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;padding:0 5px;white-space:nowrap;}
+.strat-body{flex:1;min-width:0;}
+.strat-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.strat-text{font-size:11px;color:var(--muted);line-height:1.6;}
+
+/* FOOTER */
+.foot{background:var(--gray);border-radius:var(--r);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.foot-txt{font-size:11px;color:var(--muted);}
+.foot-bs{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* ════════════════════════════════
+   EDIT MODE SYSTEM
+════════════════════════════════ */
+/* ── LOCKED STATE (default) — contenteditable="true" but visually frozen ── */
+[contenteditable="true"]{
+  outline:none;cursor:default;border-bottom:none;min-width:4px;
+  user-select:none;-webkit-user-select:none;
+  pointer-events:none;
+}
+td [contenteditable="true"], th [contenteditable="true"] {
+  display:inline;
+}
+/* No focus style when locked */
+[contenteditable="true"]:focus{
+  outline:none;background:none;border-bottom:none;padding:0;
+}
+
+/* ── EDIT MODE ON — re-enable editing visuals ── */
+body.em [contenteditable="true"]{
+  cursor:text;border-bottom:1px dashed #b0bec5;
+  user-select:text;-webkit-user-select:text;
+  pointer-events:auto;
+}
+body.em [contenteditable="true"]:focus{
+  border-bottom-color:var(--navy);background:#e8eaf6;
+  border-radius:2px;padding:0 2px;outline:none;
+}
+
+/* ── LOCKED STATE indicator on topbar ── */
+body:not(.em) .topbar::before {
+  content: '🔒 โหมดนำเสนอ — กด "✏️ แก้ไข Dashboard" เพื่อแก้ไขข้อมูล';
+  font-size:10px;color:#78909c;font-family:var(--font);
+  display:block;width:100%;margin-bottom:2px;
+}
+/* ── Tab spans: disable pointer-events on inner span when locked ── */
+body:not(.em) .tab span[data-e] {
+  pointer-events: none;
+}
+/* ── Prevent cursor text on hover when locked ── */
+body:not(.em) [data-e]:hover {
+  cursor: default !important;
+  background: none !important;
+  outline: none !important;
+}
+
+/* Edit Mode Badge */
+#edit-badge{
+  position:fixed;top:14px;right:14px;z-index:9999;
+  background:var(--navy3);color:#fff;border-radius:20px;
+  padding:6px 16px;font-size:11px;font-weight:700;
+  box-shadow:0 3px 12px rgba(0,0,0,.3);display:flex;align-items:center;gap:8px;
+  font-family:var(--font);
+}
+#edit-badge .dot{width:8px;height:8px;border-radius:50%;background:#69f0ae;animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* Edit Mode ON — highlight editable zones */
+body.em [data-e]{
+  outline:1.5px dashed rgba(121,134,203,.6);border-radius:3px;cursor:text;
+  transition:outline .1s,background .1s;
+}
+body.em [data-e]:hover{outline-color:var(--navy3);background:rgba(121,134,203,.1);}
+body.em [data-e][contenteditable="true"]:focus{outline:2px solid var(--navy);background:#e8eaf6;}
+
+/* Hover delete/action buttons — show only in edit mode */
+.del-btn,.del-row-btn,.add-row-btn{
+  display:none;font-size:9px;font-weight:700;border:none;cursor:pointer;
+  border-radius:4px;font-family:var(--font);padding:2px 7px;
+}
+body.em .del-btn{display:inline-flex;}
+body.em .del-row-btn{display:inline-flex;}
+
+/* Floating add-row button — visible only in edit mode */
+.add-row-wrap{display:none;margin-top:5px;}
+body.em .add-row-wrap{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* Toolbar row inside each card — visible in edit mode */
+.card-em-bar,.kcard-em-bar{display:none;gap:5px;flex-wrap:wrap;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--gray2);}
+body.em .card-em-bar,body.em .kcard-em-bar{display:flex;}
+
+/* Section top toolbar */
+.sec-toolbar{display:none;gap:6px;flex-wrap:wrap;margin-bottom:10px;padding:8px 12px;background:#e8eaf6;border-radius:8px;border:1px dashed #7986cb;}
+body.em .sec-toolbar{display:flex;}
+
+/* Quick-edit button style */
+.qe-btn{background:#e8f5e9;color:#1b5e20;padding:3px 10px;border-radius:5px;font-size:10px;font-weight:700;border:1px solid #a5d6a7;cursor:pointer;font-family:var(--font);}
+.qe-btn.red{background:#ffebee;color:#c62828;border-color:#ef9a9a;}
+.qe-btn.blue{background:#e3f2fd;color:#0d47a1;border-color:#90caf9;}
+.qe-btn.amber{background:#fff8e1;color:#e65100;border-color:#ffcc80;}
+.qe-btn.purple{background:#f3e5f5;color:#6a1b9a;border-color:#ce93d8;}
+
+/* Row-actions column */
+.ra{width:28px;text-align:center;vertical-align:middle;}
+/* YoY table */
+#yoy-body td, #yoy-body th{white-space:nowrap;}
+
+/* Color picker select */
+.color-sel{font-size:10px;padding:2px 4px;border-radius:4px;border:1px solid var(--gray3);cursor:pointer;font-family:var(--font);}
+
+@media print{
+  /* ── Reset layout for print ── */
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  body{background:#fff!important;padding:0!important;margin:0!important;font-size:11px!important;}
+  .page{max-width:100%!important;margin:0!important;padding:0 8px!important;}
+
+  /* ── Hide all UI controls ── */
+  .topbar,.upload-bar,.tabs,#edit-badge,
+  .sec-toolbar,.card-em-bar,.kcard-em-bar,
+  .add-row-wrap,.del-btn,.del-row-btn,.add-row-btn,
+  .qe-btn,.del-btn,.ra{display:none!important;}
+
+  /* ── Show ALL sections ── */
+  .sec{display:block!important;}
+
+  /* ── Section separators ── */
+  .sec{
+    border-top:2px solid #1a237e;
+    padding-top:10px;
+    margin-top:0;
+  }
+  .sec:first-of-type{border-top:none;}
+
+  /* ── Page breaks ── */
+  .sec{page-break-before:always;}
+  .sec:first-of-type{page-break-before:avoid;}
+  .card{page-break-inside:avoid;}
+  .kgrid{page-break-inside:avoid;}
+
+  /* ── Section title label ── */
+  .pdf-sec-title{
+    display:block!important;
+    font-size:13px;font-weight:700;color:#1a237e;
+    margin-bottom:8px;padding-bottom:4px;
+    border-bottom:1.5px solid #1a237e;
+  }
+
+  /* ── Header stays on first page ── */
+  .hdr{
+    background:#1a237e!important;color:#fff!important;
+    border-radius:6px;padding:10px 16px;margin-bottom:8px;
+    display:flex!important;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;gap:8px;
+  }
+  .hdr-chip{
+    background:rgba(255,255,255,.15)!important;
+    border:1px solid rgba(255,255,255,.3)!important;
+  }
+  .hdr-chip b{font-size:13px!important;}
+
+  /* ── Tables ── */
+  .tmtable th{background:#1a237e!important;color:#fff!important;font-size:9px!important;padding:5px 6px!important;}
+  .tmtable td{font-size:9px!important;padding:4px 6px!important;}
+  .debt-table th{background:#283593!important;color:#fff!important;font-size:9px!important;padding:5px 6px!important;}
+  .debt-table td{font-size:9px!important;padding:4px 6px!important;}
+
+  /* ── KPI cards keep left-border color ── */
+  .kcard{border-left-width:3px!important;}
+  .kcard.red{border-left-color:#e53935!important;}
+  .kcard.amber{border-left-color:#fb8c00!important;}
+  .kcard.green{border-left-color:#43a047!important;}
+  .kcard.blue{border-left-color:#1976d2!important;}
+
+  /* ── Bars keep colors ── */
+  .bf-red{background:#e53935!important;}
+  .bf-amber{background:#fb8c00!important;}
+  .bf-green{background:#43a047!important;}
+  .tbl-bar-bg{background:#eceff1!important;}
+
+  /* ── Pills / badges keep colors ── */
+  .pill,.badge{-webkit-print-color-adjust:exact!important;}
+  .p-red{background:#ffebee!important;color:#c62828!important;}
+  .p-amber{background:#fff8e1!important;color:#e65100!important;}
+  .p-green{background:#e8f5e9!important;color:#1b5e20!important;}
+  .br{background:#ffebee!important;color:#c62828!important;}
+  .ba{background:#fff8e1!important;color:#e65100!important;}
+  .bg{background:#e8f5e9!important;color:#1b5e20!important;}
+  .bb{background:#e3f2fd!important;color:#0d47a1!important;}
+
+  /* ── abox colors ── */
+  .abox{background:#ffebee!important;border-left-color:#e53935!important;}
+  .abox.amber{background:#fff8e1!important;border-left-color:#fb8c00!important;}
+  .abox.green{background:#e8f5e9!important;border-left-color:#43a047!important;}
+  .abox.blue{background:#e3f2fd!important;border-left-color:#1976d2!important;}
+
+  /* ── Remove editable underlines ── */
+  [contenteditable="true"]{border-bottom:none!important;}
+
+  /* ── PDF watermark / footer ── */
+  .pdf-footer{
+    display:block!important;
+    position:fixed;bottom:6px;left:0;right:0;
+    text-align:center;font-size:8px;color:#90a4ae;
+    border-top:0.5px solid #cfd8dc;padding-top:4px;
+  }
+  /* ── Tag colors ── */
+  .to{background:#e3f2fd!important;color:#0d47a1!important;}
+  .td{background:#fff8e1!important;color:#e65100!important;}
+  .ti{background:#ffebee!important;color:#c62828!important;}
+  .tg{background:#e8f5e9!important;color:#1b5e20!important;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════ PDF FOOTER (print only) ══════════ -->
+<div class="pdf-footer" style="display:none;">
+  Dashboard ฝ่ายขายและการตลาด ธุรกิจอาหารสัตว์ (JBF) &nbsp;|&nbsp; พิมพ์เมื่อ: <span id="pdf-date"></span>
+</div>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="hdr">
+  <div>
+    <div class="hdr-title" data-e contenteditable="true">Dashboard ประจำเดือน — ฝ่ายขายและการตลาด ธุรกิจอาหารสัตว์</div>
+    <div class="hdr-sub">ผู้รายงาน: <span data-e contenteditable="true">นายณัฐวุฒิ แสงจันทร์</span> &nbsp;|&nbsp; Fiscal Year <span data-e contenteditable="true">2026</span> &nbsp;|&nbsp; <span data-e contenteditable="true">Thailand</span></div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-chip"><span data-e contenteditable="true">เดือน</span><b data-e contenteditable="true">เม.ย. 2569</b></div>
+    <div class="hdr-chip"><span data-e contenteditable="true">Actual Tons</span><b data-e contenteditable="true">5,979.51</b></div>
+    <div class="hdr-chip"><span data-e contenteditable="true">%Achieve</span><b data-e contenteditable="true" style="color:#ffcdd2;">77.71%</b></div>
+    <div class="hdr-chip"><span data-e contenteditable="true">YTD Achieve</span><b data-e contenteditable="true" style="color:#ffcdd2;">25.43%</b></div>
+  </div>
+</div>
+
+<!-- ══════════ SAVE BAR ══════════ -->
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span>💾</span>
+    <span id="save-ind" style="font-size:11px;color:var(--muted);">บันทึกอัตโนมัติ — แก้ไขข้อความแล้วรอสักครู่จะบันทึกเอง</span>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <button id="em-toggle-btn" onclick="toggleEM()" style="padding:4px 14px;border-radius:6px;border:1.5px solid var(--navy3);background:#e8eaf6;color:var(--navy3);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:700;">✏️ แก้ไข Dashboard</button>
+    <button onclick="saveAll()" style="padding:4px 12px;border-radius:6px;border:1.5px solid var(--navy);background:var(--navy);color:#fff;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">💾 บันทึก</button>
+    <button onclick="exportHTML()" style="padding:4px 12px;border-radius:6px;border:1.5px solid #1b5e20;background:#e8f5e9;color:#1b5e20;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:700;">🌐 บันทึกเป็นไฟล์ HTML</button>
+    <button onclick="exportPDF()" style="padding:4px 12px;border-radius:6px;border:1.5px solid #7b1fa2;background:#f3e5f5;color:#6a1b9a;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">📄 Export PDF</button>
+    <button onclick="exportData()" style="padding:4px 12px;border-radius:6px;border:1.5px solid var(--blue-b);background:var(--blue-bg);color:var(--blue);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">⬇ Export JSON</button>
+    <button onclick="importData()" style="padding:4px 12px;border-radius:6px;border:1.5px solid var(--amber-b);background:var(--amber-bg);color:var(--amber);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">⬆ Import</button>
+    <button onclick="resetAll()" style="padding:4px 12px;border-radius:6px;border:1.5px solid var(--red-b);background:var(--red-bg);color:var(--red);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">✕ รีเซ็ต</button>
+  </div>
+</div>
+
+<!-- ══════════ UPLOAD BAR ══════════ -->
+<div class="upload-bar">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px;">📂</span>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#3949ab;">อัปโหลดข้อมูลเดือนใหม่</div>
+        <div style="font-size:10px;color:var(--muted);">รองรับ .pdf .csv .txt — Claude AI จะอ่านและอัปเดตตัวเลขให้อัตโนมัติ</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <label style="padding:5px 14px;border-radius:6px;border:1.5px solid #3949ab;background:#3949ab;color:#fff;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">
+        📎 เลือกไฟล์
+        <input type="file" id="new-data-file" accept=".pdf,.csv,.txt" style="display:none;" onchange="handleFile(this)">
+      </label>
+      <div id="upload-fn" style="font-size:11px;color:var(--muted);font-style:italic;">ยังไม่ได้เลือกไฟล์</div>
+    </div>
+  </div>
+  <div id="upload-status" style="display:none;margin-top:10px;">
+    <div style="background:#fff;border-radius:6px;padding:10px 14px;border:0.5px solid #c5cae9;">
+      <div id="upload-prog" style="font-size:11px;color:#3949ab;font-weight:600;margin-bottom:6px;"></div>
+      <div id="parsed-sum" style="display:none;font-size:11px;color:var(--muted);background:#e8f5e9;padding:8px;border-radius:4px;margin-bottom:8px;line-height:1.7;white-space:pre-wrap;"></div>
+      <div id="upload-acts" style="display:none;gap:6px;flex-wrap:wrap;">
+        <button onclick="applyData()" style="padding:5px 14px;border-radius:6px;border:none;background:#2e7d32;color:#fff;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">✅ อัปเดต Dashboard</button>
+        <button onclick="cancelUpload()" style="padding:5px 14px;border-radius:6px;border:1.5px solid var(--red-b);background:#fff;color:var(--red);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:600;">✕ ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TABS ══════════ -->
+<div class="tabs" id="tabs-row">
+  <button class="tab active" onclick="showSec('s1',this)" id="tab-s1"><span data-e contenteditable="true">1 · KPI &amp; RAG Status</span></button>
+  <button class="tab warn"   onclick="showSec('s2',this)" id="tab-s2"><span data-e contenteditable="true">2 · Root Cause (แดง)</span></button>
+  <button class="tab"        onclick="showSec('s3',this)" id="tab-s3"><span data-e contenteditable="true">3 · TM Performance</span></button>
+  <button class="tab"        onclick="showSec('s4',this)" id="tab-s4"><span data-e contenteditable="true">4 · Pet Food &amp; ค่าใช้จ่าย</span></button>
+  <button class="tab"        onclick="showSec('s5',this)" id="tab-s5"><span data-e contenteditable="true">5 · กลยุทธ์ &amp; Action</span></button>
+  <button class="tab"        onclick="showSec('s6',this)" id="tab-s6"><span data-e contenteditable="true">6 · ลูกค้าใหม่ &amp; หนี้ค้าง</span></button>
+  <button class="tab"        onclick="showSec('s7',this)" id="tab-s7"><span data-e contenteditable="true">7 · YoY &amp; Trend</span></button>
+</div>
+
+<!-- ══════════════════════════════════════
+     S1 — KPI & RAG
+══════════════════════════════════════ -->
+<div class="sec active" id="s1">
+  <div class="sec-toolbar">
+    <button class="qe-btn blue" onclick="addKpiCard('kg1')">+ KPI Card (แถวบน)</button>
+    <button class="qe-btn blue" onclick="addKpiCard('kg2')">+ KPI Card (แถวล่าง)</button>
+    <button class="qe-btn" onclick="addPgRow()">+ แถว Product Group</button>
+    <button class="qe-btn" onclick="addQBox()">+ คำถามผู้จัดการ</button>
+  </div>
+
+  <div class="slabel"><span data-e contenteditable="true">ส่วนที่ 1 — KPI Summary เมษายน 2569</span></div>
+
+  <!-- KPI ROW 1 -->
+  <div class="kgrid" id="kg1">
+    <div class="kcard red" id="kc-gt">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red" selected>🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="">⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">Grand Total Tons</span> <span class="badge br" data-e contenteditable="true">แดง</span></div>
+      <div class="kval" data-e contenteditable="true">5,979.51</div>
+      <div class="ksub" data-e contenteditable="true">Budget: 7,695 Tons</div>
+      <div class="kpct red" data-e contenteditable="true">77.71% — ขาด −1,715.49 Tons</div>
+      <div class="ksub" data-e contenteditable="true">เทียบเดือนก่อน: 7,122.26 (−1,142.75)</div>
+    </div>
+    <div class="kcard red">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red" selected>🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="">⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">Livestock Tons</span> <span class="badge br" data-e contenteditable="true">แดง</span></div>
+      <div class="kval" data-e contenteditable="true">4,626.10</div>
+      <div class="ksub" data-e contenteditable="true">Budget: 5,955 Tons</div>
+      <div class="kpct red" data-e contenteditable="true">77.68% — ขาด −1,328.90 Tons</div>
+    </div>
+    <div class="kcard red">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red" selected>🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="">⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">Aqua Tons</span> <span class="badge br" data-e contenteditable="true">แดง</span></div>
+      <div class="kval" data-e contenteditable="true">488.32</div>
+      <div class="ksub" data-e contenteditable="true">Budget: 870 Tons</div>
+      <div class="kpct red" data-e contenteditable="true">56.13% — ขาด −381.68 Tons</div>
+    </div>
+    <div class="kcard amber">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red">🔴 แดง</option><option value="amber" selected>🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="">⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">Pet Food Tons</span> <span class="badge ba" data-e contenteditable="true">เหลือง</span></div>
+      <div class="kval" data-e contenteditable="true">865.09</div>
+      <div class="ksub" data-e contenteditable="true">Budget: 870 Tons</div>
+      <div class="kpct amber" data-e contenteditable="true">99.44% — ขาด −4.91 Tons</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW 2 -->
+  <div class="kgrid" id="kg2">
+    <div class="kcard blue">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red">🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue" selected>🔵 น้ำเงิน</option><option value="">⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">Medicine Sales</span> <span class="badge bb" data-e contenteditable="true">รายได้</span></div>
+      <div class="kval" data-e contenteditable="true">3,150,056</div>
+      <div class="ksub" data-e contenteditable="true">บาท</div>
+    </div>
+    <div class="kcard">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red">🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="" selected>⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">YTD Total Sales</span></div>
+      <div class="kval" data-e contenteditable="true">26,408.79</div>
+      <div class="ksub" data-e contenteditable="true">Tons (ม.ค.–เม.ย.)</div>
+      <div class="kpct red" data-e contenteditable="true">25.43% ของ Budget ปี</div>
+    </div>
+    <div class="kcard">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red">🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="" selected>⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">Expense/Ton (Avg)</span></div>
+      <div class="kval" data-e contenteditable="true">28.45</div>
+      <div class="ksub" data-e contenteditable="true">บาท/Ton (รวม 3 ภาค)</div>
+    </div>
+    <div class="kcard green">
+      <div class="kcard-em-bar">
+        <select class="color-sel" onchange="setKcardColor(this)"><option value="red">🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green" selected>🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option><option value="">⬜ ปกติ</option></select>
+        <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+      </div>
+      <div class="klabel"><span data-e contenteditable="true">J-10 บรรลุเป้า</span> <span class="badge bg" data-e contenteditable="true">เขียว</span></div>
+      <div class="kval" data-e contenteditable="true">235.20</div>
+      <div class="ksub" data-e contenteditable="true">Budget: 200 Tons</div>
+      <div class="kpct green" data-e contenteditable="true">117.60% +35.20 Tons</div>
+    </div>
+  </div>
+
+  <!-- PRODUCT GROUP BARS -->
+  <div class="slabel"><span data-e contenteditable="true">สถานะ RAG แต่ละ Product Group</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">Product Group vs Budget — เมษายน 2569</div>
+    <div id="pg-container">
+      <div class="pgrow" id="pg-livestock">
+        <div class="pgdot" style="background:var(--red-b);"></div>
+        <div class="pgname" data-e contenteditable="true">Livestock (สุกร+สัตว์ปีก+วัว)</div>
+        <div class="pgbars">
+          <div style="font-size:9px;color:var(--muted);" data-e contenteditable="true">4,626.10 / 5,955.00 Tons</div>
+          <div class="barbg"><div class="barfill bf-red" style="width:77.68%;"></div></div>
+        </div>
+        <div class="pgnum" data-e contenteditable="true">ขาด −1,328.90</div>
+        <div class="pgpct red" data-e contenteditable="true">77.68%</div>
+        <button class="del-btn qe-btn red" onclick="this.closest('.pgrow').remove();saveAll()">🗑</button>
+      </div>
+      <div class="pgrow">
+        <div class="pgdot" style="background:var(--red-b);"></div>
+        <div class="pgname" data-e contenteditable="true">Aqua (สัตว์น้ำ)</div>
+        <div class="pgbars">
+          <div style="font-size:9px;color:var(--muted);" data-e contenteditable="true">488.32 / 870.00 Tons</div>
+          <div class="barbg"><div class="barfill bf-red" style="width:56.13%;"></div></div>
+        </div>
+        <div class="pgnum" data-e contenteditable="true">ขาด −381.68</div>
+        <div class="pgpct red" data-e contenteditable="true">56.13%</div>
+        <button class="del-btn qe-btn red" onclick="this.closest('.pgrow').remove();saveAll()">🗑</button>
+      </div>
+      <div class="pgrow">
+        <div class="pgdot" style="background:var(--amber-b);"></div>
+        <div class="pgname" data-e contenteditable="true">Pet Food (สัตว์เลี้ยง)</div>
+        <div class="pgbars">
+          <div style="font-size:9px;color:var(--muted);" data-e contenteditable="true">865.09 / 870.00 Tons</div>
+          <div class="barbg"><div class="barfill bf-amber" style="width:99.44%;"></div></div>
+        </div>
+        <div class="pgnum" data-e contenteditable="true">ขาด −4.91</div>
+        <div class="pgpct amber" data-e contenteditable="true">99.44%</div>
+        <button class="del-btn qe-btn red" onclick="this.closest('.pgrow').remove();saveAll()">🗑</button>
+      </div>
+      <div class="pgrow" style="background:#fce4ec;">
+        <div class="pgdot" style="background:var(--red-b);"></div>
+        <div class="pgname" style="font-weight:700;" data-e contenteditable="true">Grand Total</div>
+        <div class="pgbars">
+          <div style="font-size:9px;color:var(--muted);" data-e contenteditable="true">5,979.51 / 7,695.00 Tons</div>
+          <div class="barbg"><div class="barfill bf-red" style="width:77.71%;"></div></div>
+        </div>
+        <div class="pgnum" data-e contenteditable="true">ขาด −1,715.49</div>
+        <div class="pgpct red" data-e contenteditable="true">77.71%</div>
+        <button class="del-btn qe-btn red" onclick="this.closest('.pgrow').remove();saveAll()">🗑</button>
+      </div>
+    </div>
+    <div class="add-row-wrap"><button class="qe-btn" onclick="addPgRow()">+ เพิ่มแถว Product Group</button></div>
+  </div>
+
+  <!-- 4 QUESTIONS -->
+  <div class="slabel"><span data-e contenteditable="true">4 คำถามผู้จัดการ (บังคับตอบทุกเดือน)</span></div>
+  <div class="card">
+    <div class="qgrid" id="qgrid">
+      <div class="qbox">
+        <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.qbox').remove();saveAll()">🗑 ลบคำถามนี้</button></div>
+        <div><span class="qnum" data-e contenteditable="true">1</span><span class="qlabel" data-e contenteditable="true"> KPI แดงสุดคืออะไร?</span></div>
+        <div class="qtext" data-e contenteditable="true">Aqua ต่ำสุด 56.13% (ขาด 382 Tons) รองมา Livestock 77.68% (ขาด 1,329 Tons) — ทั้งคู่เป็นปัญหาหลักของเดือนนี้</div>
+      </div>
+      <div class="qbox">
+        <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.qbox').remove();saveAll()">🗑 ลบคำถามนี้</button></div>
+        <div><span class="qnum" data-e contenteditable="true">2</span><span class="qlabel" data-e contenteditable="true"> ปัญหาจากระบบหรือคน?</span></div>
+        <div class="qtext" data-e contenteditable="true">มี 3 ปัจจัยหลัก: (1) ลูกค้า Stock ล่วงหน้าก่อนขึ้นราคา (2) วันหยุดสงกรานต์ −3 วันทำงาน กระทบ 600–700 Tons (3) ลูกค้าเปลี่ยนแบรนด์คู่แข่ง</div>
+      </div>
+      <div class="qbox">
+        <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.qbox').remove();saveAll()">🗑 ลบคำถามนี้</button></div>
+        <div><span class="qnum" data-e contenteditable="true">3</span><span class="qlabel" data-e contenteditable="true"> ใครต่ำกว่ามาตรฐาน?</span></div>
+        <div class="qtext" data-e contenteditable="true">J-08 ต่ำสุด 51.24% | J-05 ต่ำ 75.09% | J-09 ต่ำ 66.93% — 3 เขตนี้ต้องมี Action Plan ชัดเจน</div>
+      </div>
+      <div class="qbox">
+        <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.qbox').remove();saveAll()">🗑 ลบคำถามนี้</button></div>
+        <div><span class="qnum" data-e contenteditable="true">4</span><span class="qlabel" data-e contenteditable="true"> ถ้าไม่แก้ใน 30 วัน?</span></div>
+        <div class="qtext" data-e contenteditable="true">ขาด 1,715 Tons คิดเป็น ~29.1M บาท | YTD 25.43% หากไม่เร่ง Recovery จะไม่บรรลุ Budget ปีแน่นอน</div>
+      </div>
+    </div>
+    <div class="add-row-wrap"><button class="qe-btn" onclick="addQBox()">+ เพิ่มคำถาม</button></div>
+  </div>
+</div><!-- /s1 -->
+
+<!-- ══════════════════════════════════════
+     S2 — ROOT CAUSE
+══════════════════════════════════════ -->
+<div class="sec" id="s2">
+  <div class="sec-toolbar">
+    <button class="qe-btn red" onclick="addRcCard('red')">+ สาเหตุ (แดง)</button>
+    <button class="qe-btn amber" onclick="addRcCard('amber')">+ สาเหตุ (เหลือง)</button>
+    <button class="qe-btn" onclick="addRcCard('green')">+ สาเหตุ (เขียว)</button>
+  </div>
+  <div class="slabel"><span data-e contenteditable="true">ส่วนที่ 2 — Root Cause Analysis</span></div>
+
+  <div class="card" id="rc1">
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card นี้</button></div>
+    <div class="shead"><span style="color:var(--red);">●</span> <span data-e contenteditable="true">สาเหตุที่ 1 — ลูกค้า Stock ล่วงหน้าก่อนขึ้นราคา (ผลกระทบ: ~600–700 Tons)</span></div>
+    <div class="abox">
+      <div class="atitle" data-e contenteditable="true">Process + Customer Behavior</div>
+      <div class="atext" data-e contenteditable="true">ลูกค้าหลายรายทำการ Stock อาหารสัตว์ตั้งแต่ปลายเดือนมีนาคม เพื่อล็อคราคาเดิมก่อนปรับขึ้น ส่งผลให้ยอดสั่งซื้อในเมษายนชะลอตัวอย่างชัดเจน เช่น ธีรัตม์ (J01) รับ 90 Tons วันที่ 30–31 มีนาคม, ฟูกิจ, โอมอร์เพ็ทช็อป, โอเชียฟาร์ม, หจก.เจี๊ยบฟาร์ม และ บจก.ริริน</div>
+      <div class="tags">
+        <span class="tag to">Owner: <span data-e contenteditable="true">ณัฐวุฒิ + ทีม TM</span></span>
+        <span class="tag td">Due: <span data-e contenteditable="true">31 พ.ค. 69</span></span>
+        <span class="tag ti" data-e contenteditable="true">กระทบ: 600–700 Tons</span>
+      </div>
+    </div>
+    <div class="abox amber">
+      <div class="atitle amber" data-e contenteditable="true">Recovery Plan</div>
+      <div class="atext" data-e contenteditable="true">1. ติดตามลูกค้ากลุ่มนี้ทันทีในพ.ค. เพราะ Stock เดิมน่าจะหมดแล้ว&#13;2. เตือนล่วงหน้าก่อนปรับราคาครั้งต่อไป&#13;3. วิเคราะห์ Pattern ลูกค้า Stock ล่วงหน้า เพื่อ Forecast ยอดเดือนถัดไปได้ถูกต้อง</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card นี้</button></div>
+    <div class="shead"><span style="color:var(--red);">●</span> <span data-e contenteditable="true">สาเหตุที่ 2 — วันหยุดสงกรานต์ (ผลกระทบ: ~600–700 Tons)</span></div>
+    <div class="abox">
+      <div class="atitle" data-e contenteditable="true">External Factor + Process</div>
+      <div class="atext" data-e contenteditable="true">วันทำงานเดือนเมษายนลดลง ~3 วัน จากวันหยุดสงกรานต์ ส่งผลต่อยอดรับสินค้าและการจัดส่งโดยตรง</div>
+      <div class="tags">
+        <span class="tag to">Owner: <span data-e contenteditable="true">ทีม Logistics</span></span>
+        <span class="tag td">Due: <span data-e contenteditable="true">ถาวร (ทำ SOP)</span></span>
+        <span class="tag ti" data-e contenteditable="true">กระทบ: ~600–700 Tons</span>
+      </div>
+    </div>
+    <div class="abox amber">
+      <div class="atitle amber" data-e contenteditable="true">Recovery Plan</div>
+      <div class="atext" data-e contenteditable="true">1. วางแผน Pre-stock ล่วงหน้า 1 สัปดาห์ก่อนช่วงวันหยุดยาวทุกปี&#13;2. ทำ SOP จัดการรถสายไกลช่วงเทศกาล&#13;3. ตั้ง Budget เดือนเมษายนให้ต่ำลงเล็กน้อยโดยอิงข้อมูลประวัติ</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card นี้</button></div>
+    <div class="shead"><span style="color:var(--red);">●</span> <span data-e contenteditable="true">สาเหตุที่ 3 — ลูกค้าเปลี่ยนไปใช้แบรนด์คู่แข่งที่ถูกกว่า</span></div>
+    <div class="abox">
+      <div class="atitle" data-e contenteditable="true">Customer + Competitor</div>
+      <div class="atext" data-e contenteditable="true">หลังปรับราคาสินค้าขึ้น ลูกค้าหลายรายหันไปใช้แบรนด์อื่นที่ราคาต่ำกว่า:&#13;• J02: ร้านซับใน บจก.ยอดเยี่ยม → แบรนด์ราคาถูก&#13;• J02: วารินทร์อาหารสัตว์ → โปรเกรด&#13;• J01: นวนิช/ลีเจริญภัณฑ์ → นานาพรรณ, แหลมทอง</div>
+      <div class="tags">
+        <span class="tag to">Owner: <span data-e contenteditable="true">TM J01, J02</span></span>
+        <span class="tag td">Due: <span data-e contenteditable="true">31 พ.ค. 69</span></span>
+        <span class="tag ti" data-e contenteditable="true">กระทบ: ระยะยาว</span>
+      </div>
+    </div>
+    <div class="abox amber">
+      <div class="atitle amber" data-e contenteditable="true">Recovery Plan</div>
+      <div class="atext" data-e contenteditable="true">1. เข้าเยี่ยมลูกค้ากลุ่มนี้ภายใน 2 สัปดาห์ เพื่อเสนอ Value ที่คู่แข่งให้ไม่ได้&#13;2. พิจารณา Promotion พิเศษสำหรับลูกค้าที่เสี่ยงหลุด&#13;3. เปรียบเทียบ Price Point vs คู่แข่งแต่ละราย</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card นี้</button></div>
+    <div class="shead"><span style="color:var(--amber);">●</span> <span data-e contenteditable="true">สาเหตุที่ 4 — ปัจจัยอื่นๆ</span></div>
+    <div class="row" style="gap:8px;">
+      <div class="col">
+        <div class="abox amber">
+          <div class="atitle amber" data-e contenteditable="true">อากาศร้อน → ไก่กินอาหารลดลง</div>
+          <div class="atext" data-e contenteditable="true">เดือนเมษายนอากาศร้อนจัด ส่งผลให้อัตราการกินอาหารของไก่ไข่ลดลงอย่างเห็นได้ชัด</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="abox amber">
+          <div class="atitle amber" data-e contenteditable="true">Online Platform ยกเลิกส่งฟรี (J03)</div>
+          <div class="atext" data-e contenteditable="true">แพลตฟอร์มออนไลน์ถูกยกเลิกการส่งฟรี ทำให้สินค้า 20 กก. ขายไม่ได้ ยอดลดลง ~15 Tons</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="abox amber">
+          <div class="atitle amber" data-e contenteditable="true">เกษตรกรรายย่อยหยุดเลี้ยง</div>
+          <div class="atext" data-e contenteditable="true">ต้นทุนค่าอาหารสูงขึ้นทำให้เกษตรกรรายย่อยบางรายหยุดเลี้ยงหรือลดจำนวน</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /s2 -->
+
+<!-- ══════════════════════════════════════
+     S3 — TM PERFORMANCE
+══════════════════════════════════════ -->
+<div class="sec" id="s3">
+  <div class="sec-toolbar">
+    <button class="qe-btn blue" onclick="addTmRow()">+ เพิ่มแถว TM</button>
+    <button class="qe-btn" onclick="addCoachCard()">+ เพิ่ม Coaching Card</button>
+  </div>
+  <div class="slabel"><span data-e contenteditable="true">ส่วนที่ 3 — TM Performance เปรียบเทียบรายเขต</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">Actual vs Budget vs Last Month — รายละเอียดแต่ละ TM</div>
+    <div style="overflow-x:auto;">
+    <table class="tmtable" id="tm-table">
+      <thead>
+        <tr>
+          <th data-e contenteditable="true">TM Code</th>
+          <th class="r" data-e contenteditable="true">Budget</th>
+          <th class="r" data-e contenteditable="true">Actual</th>
+          <th class="r" data-e contenteditable="true">%Achieve</th>
+          <th class="r" data-e contenteditable="true">Diff vs Budget</th>
+          <th class="r" data-e contenteditable="true">Last Month</th>
+          <th class="r" data-e contenteditable="true">Diff vs LM</th>
+          <th data-e contenteditable="true">Status</th>
+          <th data-e contenteditable="true">Action ที่ต้องทำ</th>
+          <th class="ra"></th>
+        </tr>
+      </thead>
+      <tbody id="tm-body">
+        <tr><td data-e contenteditable="true"><b>J-01</b></td><td class="r" data-e contenteditable="true">1,070</td><td class="r" data-e contenteditable="true">865.38</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:80.88%;"></div></div><span class="tbl-bar-pct p-red" style="color:var(--red);" data-e contenteditable="true">80.88%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−204.62</td><td class="r" data-e contenteditable="true">1,019.11</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−153.73</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">ระบุ Action</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-02</b></td><td class="r" data-e contenteditable="true">875</td><td class="r" data-e contenteditable="true">689.95</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:78.85%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">78.85%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−185.05</td><td class="r" data-e contenteditable="true">814.73</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−124.77</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">ลูกค้าเปลี่ยนแบรนด์หลายราย — ต้องเข้าเยี่ยมด่วน</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-03</b></td><td class="r" data-e contenteditable="true">855</td><td class="r" data-e contenteditable="true">667.48</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:78.07%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">78.07%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−187.52</td><td class="r" data-e contenteditable="true">751.60</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−84.13</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">Online หาย 15 Tons — ติด Coupon ส่งฟรี</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-04</b></td><td class="r" data-e contenteditable="true">850</td><td class="r" data-e contenteditable="true">783.52</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-amber" style="width:92.18%;"></div></div><span class="tbl-bar-pct" style="color:var(--amber);" data-e contenteditable="true">92.18%</span></div></td><td class="r" style="color:var(--amber);" data-e contenteditable="true">−66.49</td><td class="r" data-e contenteditable="true">911.82</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−128.30</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">เหลือง</span></td><td class="action-col" data-e contenteditable="true">ใกล้เป้า — Push อีก 67 Tons ในพ.ค.</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-05</b></td><td class="r" data-e contenteditable="true">1,170</td><td class="r" data-e contenteditable="true">878.51</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:75.09%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">75.09%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−291.50</td><td class="r" data-e contenteditable="true">1,147.60</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−269.10</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">ขาดสูงสุด — วิเคราะห์ Root Cause เพิ่ม</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-06</b></td><td class="r" data-e contenteditable="true">480</td><td class="r" data-e contenteditable="true">438.32</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-amber" style="width:91.32%;"></div></div><span class="tbl-bar-pct" style="color:var(--amber);" data-e contenteditable="true">91.32%</span></div></td><td class="r" style="color:var(--amber);" data-e contenteditable="true">−41.68</td><td class="r" data-e contenteditable="true">453.63</td><td class="r" style="color:var(--amber);" data-e contenteditable="true">−15.31</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">เหลือง</span></td><td class="action-col" data-e contenteditable="true">ใกล้เป้า — ดีขึ้นได้ใน 1 เดือน</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-07</b></td><td class="r" data-e contenteditable="true">800</td><td class="r" data-e contenteditable="true">578.53</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:72.32%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">72.32%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−221.48</td><td class="r" data-e contenteditable="true">619.87</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−41.34</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">ระบุ Action</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-08</b></td><td class="r" data-e contenteditable="true">580</td><td class="r" data-e contenteditable="true">297.17</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:51.24%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">51.24%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−282.83</td><td class="r" data-e contenteditable="true">454.54</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−157.38</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">วิกฤต! ต้องการ Coaching ด่วน</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-09</b></td><td class="r" data-e contenteditable="true">815</td><td class="r" data-e contenteditable="true">545.47</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:66.93%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">66.93%</span></div></td><td class="r" style="color:var(--red);" data-e contenteditable="true">−269.53</td><td class="r" data-e contenteditable="true">741.76</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−196.29</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">แดง</span></td><td class="action-col" data-e contenteditable="true">ระบุ Action</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>J-10</b></td><td class="r" data-e contenteditable="true">200</td><td class="r" data-e contenteditable="true">235.20</td><td class="r"><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-green" style="width:100%;"></div></div><span class="tbl-bar-pct" style="color:var(--green);" data-e contenteditable="true">117.60%</span></div></td><td class="r" style="color:var(--green);" data-e contenteditable="true">+35.20</td><td class="r" data-e contenteditable="true">207.60</td><td class="r" style="color:var(--green);" data-e contenteditable="true">+27.60</td><td style="text-align:center;"><span class="pill p-green" data-e contenteditable="true">เขียว</span></td><td class="action-col" data-e contenteditable="true">Best practice — นำมาสอน TM อื่น</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr id="tm-total"><td><b>Total</b></td><td class="r" data-e contenteditable="true">7,695</td><td class="r" data-e contenteditable="true">5,979.51</td><td class="r" style="color:var(--red);font-weight:700;" data-e contenteditable="true">77.71%</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−1,715.49</td><td class="r" data-e contenteditable="true">7,122.26</td><td class="r" style="color:var(--red);" data-e contenteditable="true">−1,142.75</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="add-row-wrap"><button class="qe-btn blue" onclick="addTmRow()">+ เพิ่มแถว TM</button></div>
+  </div>
+
+  <div class="slabel"><span data-e contenteditable="true">TM ที่ต้องได้รับ Coaching ด่วน</span></div>
+  <div class="row" id="coach-row" style="gap:10px;flex-wrap:wrap;">
+    <div class="col card" style="min-width:200px;">
+      <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ</button></div>
+      <div class="shead"><span style="color:var(--red);" data-e contenteditable="true">● J-08 — 51.24% (วิกฤต)</span></div>
+      <div class="abox"><div class="atitle" data-e contenteditable="true">Root Cause</div><div class="atext" data-e contenteditable="true">ระบุสาเหตุหลัก: ลูกค้าหาย / ฝีมือขาย / พื้นที่ / อื่นๆ</div></div>
+      <div class="tags"><span class="tag to">Owner: <span data-e contenteditable="true">ระบุชื่อ TM J-08</span></span><span class="tag td">Due: <span data-e contenteditable="true">15 พ.ค. 69</span></span></div>
+    </div>
+    <div class="col card" style="min-width:200px;">
+      <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ</button></div>
+      <div class="shead"><span style="color:var(--red);" data-e contenteditable="true">● J-07 — 72.32%</span></div>
+      <div class="abox"><div class="atitle" data-e contenteditable="true">Root Cause</div><div class="atext" data-e contenteditable="true">ระบุสาเหตุหลัก</div></div>
+      <div class="tags"><span class="tag to">Owner: <span data-e contenteditable="true">ระบุชื่อ TM J-07</span></span><span class="tag td">Due: <span data-e contenteditable="true">31 พ.ค. 69</span></span></div>
+    </div>
+    <div class="col card" style="min-width:200px;">
+      <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ</button></div>
+      <div class="shead"><span style="color:var(--red);" data-e contenteditable="true">● J-09 — 66.93%</span></div>
+      <div class="abox"><div class="atitle" data-e contenteditable="true">Root Cause</div><div class="atext" data-e contenteditable="true">ระบุสาเหตุหลัก</div></div>
+      <div class="tags"><span class="tag to">Owner: <span data-e contenteditable="true">ระบุชื่อ TM J-09</span></span><span class="tag td">Due: <span data-e contenteditable="true">31 พ.ค. 69</span></span></div>
+    </div>
+  </div>
+  <div class="add-row-wrap"><button class="qe-btn" onclick="addCoachCard()">+ เพิ่ม Coaching Card</button></div>
+</div><!-- /s3 -->
+
+<!-- ══════════════════════════════════════
+     S4 — PET FOOD & EXPENSE
+══════════════════════════════════════ -->
+<div class="sec" id="s4">
+  <div class="sec-toolbar">
+    <button class="qe-btn blue" onclick="addGenRow('pf-body',6)">+ แถว Pet Food</button>
+    <button class="qe-btn blue" onclick="addGenRow('exp-body',5)">+ แถว Expense</button>
+  </div>
+  <div class="slabel"><span data-e contenteditable="true">Pet Food — รายละเอียดตาม Geography</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">Pet Food Pro vs Normal แยกภาค</div>
+    <table class="tmtable" style="table-layout:auto;">
+      <thead><tr>
+        <th data-e contenteditable="true" style="width:100px;">ภาค</th>
+        <th class="r" data-e contenteditable="true" style="width:90px;">Pro (Tons)</th>
+        <th class="r" data-e contenteditable="true" style="width:110px;">Normal (Tons)</th>
+        <th class="r" data-e contenteditable="true" style="width:90px;">Total (Tons)</th>
+        <th data-e contenteditable="true" style="width:auto;">%Pro</th>
+        <th class="r" data-e contenteditable="true" style="width:80px;">%Normal</th>
+        <th class="ra" style="width:32px;"></th>
+      </tr></thead>
+      <tbody id="pf-body">
+        <tr><td data-e contenteditable="true">North</td><td class="r" data-e contenteditable="true">372.44</td><td class="r" data-e contenteditable="true">65.15</td><td class="r" data-e contenteditable="true">437.59</td><td><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-green" style="width:85.11%;"></div></div><span class="tbl-bar-pct" style="color:var(--green);" data-e contenteditable="true">85.11%</span></div></td><td class="r" data-e contenteditable="true">14.89%</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">South</td><td class="r" data-e contenteditable="true">303.44</td><td class="r" data-e contenteditable="true">40.17</td><td class="r" data-e contenteditable="true">343.61</td><td><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-green" style="width:88.31%;"></div></div><span class="tbl-bar-pct" style="color:var(--green);" data-e contenteditable="true">88.31%</span></div></td><td class="r" data-e contenteditable="true">11.69%</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">Northeast</td><td class="r" data-e contenteditable="true">55.20</td><td class="r" data-e contenteditable="true">28.69</td><td class="r" data-e contenteditable="true">83.89</td><td><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-amber" style="width:65.80%;"></div></div><span class="tbl-bar-pct" style="color:var(--amber);" data-e contenteditable="true">65.80%</span></div></td><td class="r" data-e contenteditable="true">34.20%</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td><b>Total</b></td><td class="r" data-e contenteditable="true"><b>731.08</b></td><td class="r" data-e contenteditable="true"><b>134.01</b></td><td class="r" data-e contenteditable="true"><b>865.09</b></td><td data-e contenteditable="true"><b>84.51%</b></td><td class="r" data-e contenteditable="true"><b>15.49%</b></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="add-row-wrap"><button class="qe-btn blue" onclick="addGenRow('pf-body',6)">+ เพิ่มแถว</button></div>
+    <div class="abox amber" style="margin-top:10px;"><div class="atitle amber" data-e contenteditable="true">Insight: Northeast %Pro ต่ำสุด 65.80%</div><div class="atext" data-e contenteditable="true">Northeast มีสัดส่วน Normal สูงกว่าภาคอื่นมาก — อาจเป็นโอกาสในการ Upsell จาก Normal → Pro ซึ่งจะเพิ่ม Revenue/Ton ได้</div></div>
+  </div>
+
+  <div class="slabel"><span data-e contenteditable="true">Monthly Expense แยกภาค</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">Expense Summary — เมษายน 2569</div>
+    <table class="tmtable" style="table-layout:auto;">
+      <thead><tr>
+        <th data-e contenteditable="true" style="width:110px;">Expense</th>
+        <th data-e contenteditable="true" style="width:auto;">North (฿)</th>
+        <th data-e contenteditable="true" style="width:auto;">South (฿)</th>
+        <th data-e contenteditable="true" style="width:auto;">Northeast (฿)</th>
+        <th class="r" data-e contenteditable="true" style="width:110px;">Total (฿)</th>
+        <th class="ra" style="width:32px;"></th>
+      </tr></thead>
+      <tbody id="exp-body">
+        <tr><td data-e contenteditable="true">Oil Exp.</td><td class="r" data-e contenteditable="true">35,770.10</td><td class="r" data-e contenteditable="true">29,227.00</td><td class="r" data-e contenteditable="true">23,340.00</td><td class="r" data-e contenteditable="true">88,337.10</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">Hotel Exp.</td><td class="r" data-e contenteditable="true">27,427.20</td><td class="r" data-e contenteditable="true">19,780.00</td><td class="r" data-e contenteditable="true">32,100.00</td><td class="r" data-e contenteditable="true">79,307.20</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">Other Exp.</td><td class="r" data-e contenteditable="true">2,250.00</td><td class="r" data-e contenteditable="true">200.00</td><td class="r" data-e contenteditable="true">0.00</td><td class="r" data-e contenteditable="true">2,450.00</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td><b>Total Exp.</b></td><td class="r" data-e contenteditable="true"><b>65,447.30</b></td><td class="r" data-e contenteditable="true"><b>49,207.00</b></td><td class="r" data-e contenteditable="true"><b>55,440.00</b></td><td class="r" data-e contenteditable="true"><b>170,094.30</b></td><td></td></tr>
+        <tr><td data-e contenteditable="true">Sales Tons</td><td class="r" data-e contenteditable="true">2,222.81</td><td class="r" data-e contenteditable="true">2,100.34</td><td class="r" data-e contenteditable="true">1,656.36</td><td class="r" data-e contenteditable="true">5,979.51</td><td></td></tr>
+        <tr>
+          <td><b>Exp./Ton (฿)</b></td>
+          <td><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-amber" style="width:72%;"></div></div><span class="tbl-bar-pct" style="color:var(--amber);" data-e contenteditable="true">29.44</span></div></td>
+          <td><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-green" style="width:57%;"></div></div><span class="tbl-bar-pct" style="color:var(--green);" data-e contenteditable="true">23.43</span></div></td>
+          <td><div class="tbl-bar-cell"><div class="tbl-bar-bg"><div class="tbl-bar-fill bf-red" style="width:82%;"></div></div><span class="tbl-bar-pct" style="color:var(--red);" data-e contenteditable="true">33.47</span></div></td>
+          <td class="r" data-e contenteditable="true"><b>28.45</b></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="add-row-wrap"><button class="qe-btn blue" onclick="addGenRow('exp-body',5)">+ เพิ่มแถว</button></div>
+    <div class="abox" style="margin-top:10px;"><div class="atitle" data-e contenteditable="true">Northeast มี Expense/Ton สูงสุด 33.47 ฿/Ton</div><div class="atext" data-e contenteditable="true">Hotel Exp. ของ Northeast สูงที่สุด (32,100 บาท) ในขณะที่ยอดขายต่ำสุด (1,656 Tons) — ต้องทบทวนประสิทธิภาพการเดินทางและพิจารณา Route Optimization</div></div>
+  </div>
+</div><!-- /s4 -->
+
+<!-- ══════════════════════════════════════
+     S5 — STRATEGY & ACTION
+══════════════════════════════════════ -->
+<div class="sec" id="s5">
+  <div class="sec-toolbar">
+    <button class="qe-btn" onclick="addStratCard()">+ Card กลยุทธ์</button>
+    <button class="qe-btn blue" onclick="addGenRow('appr-body',6)">+ แถว Request for Approval</button>
+  </div>
+  <div class="slabel"><span data-e contenteditable="true">ส่วนที่ 5 — กลยุทธ์ใหม่และ Action Plan</span></div>
+
+  <div id="strat-container">
+    <div class="card">
+      <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card</button><button class="qe-btn blue" onclick="addStratItem(this)">+ เพิ่มข้อย่อย</button></div>
+      <div class="shead" data-e contenteditable="true">กลยุทธ์ที่ 1 — ตั้งเป้าการขายพิเศษ Top 10 ลูกค้า</div>
+      <div class="strat-item"><div class="strat-num" data-e contenteditable="true">1</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">คัดลูกค้า 10 ราย การเงินดี — ดัน +20–40% ยอดรวม</div><div class="strat-text" data-e contenteditable="true">คัดรายชื่อลูกค้าที่มีการเงินดี ในสินค้าตัวใดตัวหนึ่งหรือกลุ่มใดกลุ่มหนึ่ง เป้าหมายเพิ่มยอด 20–40% ของยอดรวมทั้งหมด</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button></div>
+      <div class="strat-item"><div class="strat-num" data-e contenteditable="true">1.1</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">เกณฑ์คัดเลือก: ยอดขาย ≥ 50 Tons, การเงินดี, ไม่มีประวัติเสีย</div><div class="strat-text" data-e contenteditable="true">ฐาน 50–100 Tons: เพิ่ม 30–40% | ฐาน ≥ 100 Tons: เพิ่ม 10–20%</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button></div>
+      <div class="tags" style="margin-top:8px;"><span class="tag to">Owner: <span data-e contenteditable="true">ณัฐวุฒิ + ทีม TM</span></span><span class="tag td">Due: <span data-e contenteditable="true">15 พ.ค. 69</span></span><span class="tag tg" data-e contenteditable="true">เป้า: +20–40% ยอดรวม</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card</button><button class="qe-btn blue" onclick="addStratItem(this)">+ เพิ่มข้อย่อย</button></div>
+      <div class="shead" data-e contenteditable="true">กลยุทธ์ที่ 2 — การเปิดลูกค้าใหม่ (Ladder Credit System)</div>
+      <div class="strat-item"><div class="strat-num" data-e contenteditable="true">2.1</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">Cash ก่อนรับสินค้า — อย่างน้อย 6 เดือน</div><div class="strat-text" data-e contenteditable="true">ซื้อเงินสดโอนเงินก่อนรับสินค้าเป็นเวลาอย่างน้อย 6 เดือน</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button></div>
+      <div class="strat-item"><div class="strat-num" data-e contenteditable="true">2.2</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">Credit 7 วัน — ผ่าน 2.1 มาแล้ว 6 เดือน + ยอด ≥ 15 Tons/เดือน</div><div class="strat-text" data-e contenteditable="true">วงเงินพิจารณาไม่เกิน 300,000 บาท ต้องมียอดซื้อ 15 Tons/เดือนสม่ำเสมอ</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button></div>
+      <div class="strat-item"><div class="strat-num" data-e contenteditable="true">2.3</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">Credit 15 วัน — ผ่าน 2.2 มาแล้ว 6 เดือน + ยอด ≥ 30 Tons/เดือน</div><div class="strat-text" data-e contenteditable="true">วงเงินพิจารณาไม่เกิน 600,000 บาท (คำนวณจาก 17,000 บาท/Ton)</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button></div>
+    </div>
+  </div>
+
+  <div class="slabel"><span data-e contenteditable="true">Request for Approval — บูธประชาสัมพันธ์พฤษภาคม–มิถุนายน 2569</span></div>
+  <div class="card">
+    <table class="tmtable" style="table-layout:auto;">
+      <thead><tr>
+        <th style="width:28px;" data-e contenteditable="true">#</th>
+        <th data-e contenteditable="true">ลูกค้า/งาน</th>
+        <th style="width:100px;" data-e contenteditable="true">วันที่</th>
+        <th class="r" style="width:80px;" data-e contenteditable="true">ส่วนลด (฿)</th>
+        <th data-e contenteditable="true">สนับสนุนสินค้า</th>
+        <th style="width:75px;text-align:center;" data-e contenteditable="true">สถานะ</th>
+        <th class="ra" style="width:32px;"></th>
+      </tr></thead>
+      <tbody id="appr-body">
+        <tr><td data-e contenteditable="true">1</td><td data-e contenteditable="true">คุณสุรชัย ฉัตรไพศาล จ.เพชรบุรี</td><td data-e contenteditable="true">29–30 พ.ค. 69</td><td class="r" data-e contenteditable="true">2,000</td><td data-e contenteditable="true">Hero Dog เนื้อ 2 กระสอบ, Wonder Cat ทูน่า 1 กระสอบ</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">รออนุมัติ</span></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">2</td><td data-e contenteditable="true">สองพี่น้องนครศรี (อ.ละแม จ.ชุมพร)</td><td data-e contenteditable="true">8–9 พ.ค. 69</td><td class="r" data-e contenteditable="true">1,000</td><td data-e contenteditable="true">Hero Dog เนื้อ 1 กระสอบ, Wonder Cat ทูน่า 1 กระสอบ</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">รออนุมัติ</span></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">3</td><td data-e contenteditable="true">หจก.ภ.เกษตรภัณฑ์ อ.พนมสารคาม</td><td data-e contenteditable="true">25–26 พ.ค. 69</td><td class="r" data-e contenteditable="true">4,000</td><td data-e contenteditable="true">Hero Dog เนื้อ 1 กระสอบ, Wonder Cat ทูน่า 1 กระสอบ</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">รออนุมัติ</span></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">4</td><td data-e contenteditable="true">กรีนฟาร์ม อ.แกลง จ.ระยอง</td><td data-e contenteditable="true">5–6 มิ.ย. 69</td><td class="r" data-e contenteditable="true">10,000</td><td data-e contenteditable="true">Wonder Cat ทูน่า 1 กระสอบ, Hero Dog เนื้อ 1 กระสอบ</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">รออนุมัติ</span></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">5</td><td data-e contenteditable="true">หจก.ศุภชัยการเกษตร อ.บ้านม่วง จ.สกลนคร</td><td data-e contenteditable="true">Roadshow 2569</td><td class="r" data-e contenteditable="true">4,000</td><td data-e contenteditable="true">ส่วนลด 20 บาท/ถุง จำนวน 200 ถุง</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">รออนุมัติ</span></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+      </tbody>
+    </table>
+    <div class="add-row-wrap"><button class="qe-btn blue" onclick="addGenRow('appr-body',6)">+ เพิ่มแถว Request</button></div>
+  </div>
+</div><!-- /s5 -->
+
+<!-- ══════════════════════════════════════
+     S6 — NEW CUSTOMER & DEBT
+══════════════════════════════════════ -->
+<div class="sec" id="s6">
+  <div class="sec-toolbar">
+    <button class="qe-btn" onclick="addGenRow('nc-body',6)">+ เพิ่มลูกค้าใหม่</button>
+    <button class="qe-btn red" onclick="addGenRow('debt-body',5)">+ เพิ่มรายการหนี้</button>
+  </div>
+  <div class="slabel"><span data-e contenteditable="true">ส่วนที่ 6 — ลูกค้าใหม่</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">New Customer เดือนเมษายน 2569</div>
+    <table class="debt-table" style="table-layout:auto;">
+      <thead><tr>
+        <th style="width:30px;" data-e contenteditable="true">#</th>
+        <th data-e contenteditable="true">ชื่อลูกค้า</th>
+        <th style="width:90px;" data-e contenteditable="true">จังหวัด</th>
+        <th style="width:80px;" data-e contenteditable="true">แบรนด์</th>
+        <th style="width:80px;" data-e contenteditable="true">ปริมาณ</th>
+        <th data-e contenteditable="true">หมายเหตุ</th>
+        <th class="ra" style="width:32px;"></th>
+      </tr></thead>
+      <tbody id="nc-body">
+        <tr><td data-e contenteditable="true">1</td><td data-e contenteditable="true">ส.เจริญฟาร์ม</td><td data-e contenteditable="true">บึงกาฬ</td><td data-e contenteditable="true">JBF</td><td data-e contenteditable="true">0.6 Tons</td><td data-e contenteditable="true">อาหารสัตว์เลี้ยง</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">2</td><td data-e contenteditable="true">กาญจนาอาหารสัตว์</td><td data-e contenteditable="true">สุพรรณบุรี</td><td data-e contenteditable="true">ซีเล็คฟีด</td><td data-e contenteditable="true">2.4 Tons</td><td data-e contenteditable="true">อาหารสัตว์น้ำ</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">3</td><td data-e contenteditable="true">ไพศาลอาหารสัตว์เลี้ยง</td><td data-e contenteditable="true">พิจิตร</td><td data-e contenteditable="true">JBF</td><td data-e contenteditable="true">1.7 Tons</td><td data-e contenteditable="true">อาหารสัตว์เลี้ยง</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+      </tbody>
+    </table>
+    <div class="add-row-wrap"><button class="qe-btn" onclick="addGenRow('nc-body',6)">+ เพิ่มลูกค้าใหม่</button></div>
+  </div>
+
+  <div class="slabel"><span data-e contenteditable="true">Outstanding Debtors — ต้องติดตาม</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">หนี้ค้างชำระ — ต้องมี Payment Plan ชัดเจน</div>
+    <table class="debt-table" style="table-layout:auto;">
+      <thead><tr>
+        <th style="width:30px;" data-e contenteditable="true">#</th>
+        <th data-e contenteditable="true">ชื่อลูกค้า</th>
+        <th style="width:110px;" data-e contenteditable="true">ยอดค้าง (฿)</th>
+        <th style="width:80px;" data-e contenteditable="true">สถานะ</th>
+        <th data-e contenteditable="true">แผนชำระ</th>
+        <th class="ra" style="width:32px;"></th>
+      </tr></thead>
+      <tbody id="debt-body">
+        <tr><td data-e contenteditable="true">1</td><td data-e contenteditable="true">บจก.สองนครพัฒนา</td><td style="text-align:right;font-family:var(--mono);" data-e contenteditable="true">3,323,512</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">ขาดชำระ</span></td><td data-e contenteditable="true">ตั้งสำรองหนี้สูญ</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">2</td><td data-e contenteditable="true">บจก.พีเจมอลล์</td><td style="text-align:right;font-family:var(--mono);" data-e contenteditable="true">11,400</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">โอนชำระ</span></td><td data-e contenteditable="true">ทุกวันที่ 30 เดือนละ 20,000 บาท</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">3</td><td data-e contenteditable="true">เจริญรัตนเคมีเกษตร2</td><td style="text-align:right;font-family:var(--mono);" data-e contenteditable="true">1,027,024</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">ขึ้นศาล</span></td><td data-e contenteditable="true">ยอดชำระ เม.ย.69 = 3,000 บาท (ขึ้นศาล 10/6/69)</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">4</td><td data-e contenteditable="true">บอทองการเกษตร</td><td style="text-align:right;font-family:var(--mono);" data-e contenteditable="true">6,697,950</td><td style="text-align:center;"><span class="pill p-red" data-e contenteditable="true">ขึ้นศาล</span></td><td data-e contenteditable="true">ยอดโอนรวม เม.ย.69 = 30,000 บาท (ขึ้นศาล 23/07/69)</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true">5</td><td data-e contenteditable="true">เกรียงวิภาฟาร์ม</td><td style="text-align:right;font-family:var(--mono);" data-e contenteditable="true">176,240</td><td style="text-align:center;"><span class="pill p-amber" data-e contenteditable="true">ติดตาม</span></td><td data-e contenteditable="true">ลูกค้าเลื่อนการโอนจ่ายจากกำหนดที่ตกลงกันไว้</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+      </tbody>
+    </table>
+    <div class="add-row-wrap"><button class="qe-btn red" onclick="addGenRow('debt-body',5)">+ เพิ่มรายการหนี้</button></div>
+    <div class="abox" style="margin-top:10px;"><div class="atitle" data-e contenteditable="true">ยอดหนี้ค้างชำระทั้งหมด: ~11.2 ล้านบาท</div><div class="atext" data-e contenteditable="true">มี 2 รายที่ขึ้นศาลแล้ว รวม ~10 ล้านบาท — ต้องติดตามอย่างใกล้ชิดและรายงานผู้บริหารทุกเดือน</div></div>
+  </div>
+</div><!-- /s6 -->
+
+<!-- ══════════════════════════════════════
+     S7 — YOY & TREND
+══════════════════════════════════════ -->
+<div class="sec" id="s7">
+  <div class="sec-toolbar">
+    <button class="qe-btn blue" onclick="addYoyRow()">+ เพิ่มแถวปี</button>
+  </div>
+  <div class="slabel"><span data-e contenteditable="true">ส่วนที่ 7 — Year on Year Comparison</span></div>
+  <div class="card">
+    <div class="shead" data-e contenteditable="true">Sales Volume เปรียบเทียบ 2024 vs 2025 vs 2026 (Tons)</div>
+    <div style="overflow-x:auto;">
+    <table class="tmtable" style="font-size:10px;">
+      <thead><tr>
+        <th data-e contenteditable="true">ปี</th>
+        <th class="r" data-e contenteditable="true">ม.ค.</th><th class="r" data-e contenteditable="true">ก.พ.</th><th class="r" data-e contenteditable="true">มี.ค.</th><th class="r" data-e contenteditable="true">เม.ย.</th>
+        <th class="r" data-e contenteditable="true">พ.ค.</th><th class="r" data-e contenteditable="true">มิ.ย.</th><th class="r" data-e contenteditable="true">ก.ค.</th><th class="r" data-e contenteditable="true">ส.ค.</th>
+        <th class="r" data-e contenteditable="true">ก.ย.</th><th class="r" data-e contenteditable="true">ต.ค.</th><th class="r" data-e contenteditable="true">พ.ย.</th><th class="r" data-e contenteditable="true">ธ.ค.</th>
+        <th class="r" data-e contenteditable="true">รวม</th><th class="ra"></th>
+      </tr></thead>
+      <tbody id="yoy-body">
+        <tr><td data-e contenteditable="true"><b>2024</b></td><td class="r" data-e contenteditable="true">7,053.83</td><td class="r" data-e contenteditable="true">6,716.62</td><td class="r" data-e contenteditable="true">6,706.89</td><td class="r" data-e contenteditable="true">6,556.47</td><td class="r" data-e contenteditable="true">6,635.65</td><td class="r" data-e contenteditable="true">6,619.43</td><td class="r" data-e contenteditable="true">6,648.91</td><td class="r" data-e contenteditable="true">6,931.40</td><td class="r" data-e contenteditable="true">6,568.15</td><td class="r" data-e contenteditable="true">6,612.88</td><td class="r" data-e contenteditable="true">6,650.52</td><td class="r" data-e contenteditable="true">6,202.20</td><td class="r" data-e contenteditable="true"><b>79,902.95</b></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr><td data-e contenteditable="true"><b>2025</b></td><td class="r" data-e contenteditable="true">6,933.06</td><td class="r" data-e contenteditable="true">5,867.24</td><td class="r" data-e contenteditable="true">6,673.55</td><td class="r" data-e contenteditable="true">6,784.75</td><td class="r" data-e contenteditable="true">7,534.59</td><td class="r" data-e contenteditable="true">7,103.47</td><td class="r" data-e contenteditable="true">6,876.43</td><td class="r" data-e contenteditable="true">7,352.71</td><td class="r" data-e contenteditable="true">6,717.59</td><td class="r" data-e contenteditable="true">7,338.76</td><td class="r" data-e contenteditable="true">6,800.35</td><td class="r" data-e contenteditable="true">7,131.96</td><td class="r" data-e contenteditable="true"><b>83,114.46</b></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+        <tr style="background:#fff8e1;"><td data-e contenteditable="true"><b>2026</b></td><td class="r" data-e contenteditable="true">6,755.66</td><td class="r" data-e contenteditable="true">6,551.35</td><td class="r" data-e contenteditable="true">7,122.26</td><td class="r" style="color:var(--red);font-weight:700;" data-e contenteditable="true">5,979.51</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" style="color:var(--muted);" data-e contenteditable="true">—</td><td class="r" data-e contenteditable="true"><b>26,408.79</b></td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="add-row-wrap"><button class="qe-btn blue" onclick="addYoyRow()">+ เพิ่มแถวปี</button></div>
+
+    <div class="row" style="margin-top:12px;gap:8px;">
+      <div class="col">
+        <div class="slabel"><span data-e contenteditable="true">เม.ย. 2026 vs เม.ย. 2025</span></div>
+        <div class="abox"><div class="atitle" data-e contenteditable="true">ต่ำกว่าปีก่อน −805.24 Tons (−11.87%)</div><div class="atext" data-e contenteditable="true">เม.ย. 2025 ทำได้ 6,784.75 Tons แต่ เม.ย. 2026 ทำได้เพียง 5,979.51 Tons — ต่ำกว่าทั้งปีก่อนและ Budget เดือน ซึ่งเป็นสัญญาณที่ต้องเฝ้าระวัง</div></div>
+      </div>
+      <div class="col">
+        <div class="slabel"><span data-e contenteditable="true">YTD (ม.ค.–เม.ย.) 2026 vs 2025</span></div>
+        <div class="abox amber"><div class="atitle amber" data-e contenteditable="true">YTD 2026: 26,408 | YTD 2025: 27,258 Tons</div><div class="atext" data-e contenteditable="true">ม.ค.–เม.ย. 2026 ยังต่ำกว่าช่วงเดียวกันของปี 2025 — ต้องเร่ง Recovery ตั้งแต่พฤษภาคมเพื่อไม่ให้ตามไม่ทัน Budget ปี</div></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /s7 -->
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="foot">
+  <div class="foot-txt" data-e contenteditable="true">Dashboard ที่ดี = บังคับให้คน รับผิดชอบ + ลงมือแก้ — ถ้าไม่มี Action = Dashboard ตกแต่งเท่านั้น</div>
+  <div class="foot-bs" id="foot-badges">
+    <span class="badge bg" data-e contenteditable="true">มี Owner ทุก KPI</span>
+    <span class="badge bg" data-e contenteditable="true">มี Due Date</span>
+    <span class="badge bg" data-e contenteditable="true">มี Recovery Plan</span>
+    <span class="badge bg" data-e contenteditable="true">มี Root Cause จริง</span>
+    <span class="badge bg" data-e contenteditable="true">มี 4Q ผู้จัดการ</span>
+    <button class="del-btn qe-btn" style="font-size:8px;" onclick="addFootBadge()">+ badge</button>
+  </div>
+</div>
+
+</div><!-- .page -->
+
+<script>
+/* ══════ STATE ══════ */
+let EM = false;
+let saveTimer = null;
+let parsedGlobal = null;
+const SK = 'jbf_v3';
+
+/* ══════ EDIT MODE TOGGLE ══════ */
+function toggleEM() {
+  EM = !EM;
+  document.body.classList.toggle('em', EM);
+  const btn = document.getElementById('em-toggle-btn');
+
+  if (EM) {
+    /* ── UNLOCK: enter edit mode ── */
+    btn.style.cssText = 'padding:4px 14px;border-radius:6px;border:1.5px solid var(--navy3);background:var(--navy3);color:#fff;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:700;';
+    btn.textContent = '✅ ออกจากโหมดแก้ไข';
+    if (!document.getElementById('edit-badge')) {
+      const b = document.createElement('div');
+      b.id = 'edit-badge';
+      b.innerHTML = '<span class="dot"></span>โหมดแก้ไขเต็ม — คลิกข้อความใดก็ได้เพื่อแก้ไข';
+      document.body.appendChild(b);
+    }
+  } else {
+    /* ── LOCK: exit edit mode ── */
+    btn.style.cssText = 'padding:4px 14px;border-radius:6px;border:1.5px solid #546e7a;background:#eceff1;color:#546e7a;font-size:11px;font-family:var(--font);cursor:pointer;font-weight:700;';
+    btn.textContent = '🔒 ล็อคการแก้ไข';
+    const b = document.getElementById('edit-badge');
+    if (b) b.remove();
+
+    // Blur any active element so no cursor remains
+    if (document.activeElement && document.activeElement.hasAttribute('data-e')) {
+      document.activeElement.blur();
+    }
+    saveAll();
+
+    // Brief flash to confirm lock
+    btn.textContent = '🔒 บันทึกและล็อคแล้ว ✓';
+    btn.style.background = '#e8f5e9';
+    btn.style.color = '#1b5e20';
+    btn.style.borderColor = '#43a047';
+    setTimeout(() => {
+      if (!EM) {
+        btn.textContent = '✏️ แก้ไข Dashboard';
+        btn.style.cssText = 'padding:4px 14px;border-radius:6px;border:1.5px solid var(--navy3);background:#e8eaf6;color:var(--navy3);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:700;';
+      }
+    }, 1800);
+  }
+}
+
+/* ══════ TAB ══════ */
+function showSec(id, btn) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════ KCARD COLOR ══════ */
+function setKcardColor(sel) {
+  const kc = sel.closest('.kcard');
+  kc.className = 'kcard' + (sel.value ? ' '+sel.value : '');
+  saveAll();
+}
+
+/* ══════ DELETE ROW ══════ */
+function delRow(btn) {
+  btn.closest('tr').remove();
+  saveAll();
+}
+
+/* ══════ ADD FUNCTIONS ══════ */
+function mkCell(text='—', cls='') {
+  return `<td${cls?' class="'+cls+'"':''} data-e contenteditable="true">${text}</td>`;
+}
+
+function addKpiCard(gridId) {
+  const grid = document.getElementById(gridId);
+  const div = document.createElement('div');
+  div.className = 'kcard';
+  div.innerHTML = `
+    <div class="kcard-em-bar">
+      <select class="color-sel" onchange="setKcardColor(this)">
+        <option value="" selected>⬜ ปกติ</option><option value="red">🔴 แดง</option><option value="amber">🟡 เหลือง</option><option value="green">🟢 เขียว</option><option value="blue">🔵 น้ำเงิน</option>
+      </select>
+      <button class="qe-btn red" onclick="this.closest('.kcard').remove();saveAll()">🗑 ลบ</button>
+    </div>
+    <div class="klabel"><span data-e contenteditable="true">ชื่อ KPI ใหม่</span></div>
+    <div class="kval" data-e contenteditable="true">0</div>
+    <div class="ksub" data-e contenteditable="true">Budget: — Tons</div>
+    <div class="kpct" data-e contenteditable="true">—%</div>`;
+  grid.appendChild(div);
+  saveAll();
+}
+
+function addPgRow() {
+  const c = document.getElementById('pg-container');
+  const div = document.createElement('div');
+  div.className = 'pgrow';
+  div.innerHTML = `
+    <div class="pgdot" style="background:var(--gray3);"></div>
+    <div class="pgname" data-e contenteditable="true">ชื่อ Group ใหม่</div>
+    <div class="pgbars">
+      <div style="font-size:9px;color:var(--muted);" data-e contenteditable="true">0 / 0 Tons</div>
+      <div class="barbg"><div class="barfill" style="width:0%;background:var(--gray3);"></div></div>
+    </div>
+    <div class="pgnum" data-e contenteditable="true">—</div>
+    <div class="pgpct" data-e contenteditable="true">—%</div>
+    <button class="del-btn qe-btn red" onclick="this.closest('.pgrow').remove();saveAll()">🗑</button>`;
+  c.insertBefore(div, c.lastElementChild); saveAll();
+}
+
+function addQBox() {
+  const g = document.getElementById('qgrid');
+  const n = g.querySelectorAll('.qbox').length + 1;
+  const div = document.createElement('div');
+  div.className = 'qbox';
+  div.innerHTML = `
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.qbox').remove();saveAll()">🗑 ลบ</button></div>
+    <div><span class="qnum" data-e contenteditable="true">${n}</span><span class="qlabel" data-e contenteditable="true"> หัวข้อคำถาม</span></div>
+    <div class="qtext" data-e contenteditable="true">พิมพ์คำตอบที่นี่</div>`;
+  g.appendChild(div); saveAll();
+}
+
+function addRcCard(color) {
+  const s2 = document.getElementById('s2');
+  const div = document.createElement('div');
+  div.className = 'card';
+  const dot = color==='red'?'var(--red)':color==='amber'?'var(--amber)':'var(--green)';
+  div.innerHTML = `
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card</button></div>
+    <div class="shead"><span style="color:${dot};">●</span> <span data-e contenteditable="true">สาเหตุใหม่ — ระบุชื่อและผลกระทบ</span></div>
+    <div class="abox${color!=='red'?' '+color:''}">
+      <div class="atitle${color!=='red'?' '+color:''}" data-e contenteditable="true">หมวดสาเหตุ</div>
+      <div class="atext" data-e contenteditable="true">ระบุรายละเอียดสาเหตุ Root Cause จริง</div>
+      <div class="tags">
+        <span class="tag to">Owner: <span data-e contenteditable="true">ระบุชื่อ</span></span>
+        <span class="tag td">Due: <span data-e contenteditable="true">—</span></span>
+        <span class="tag ti" data-e contenteditable="true">กระทบ: — Tons</span>
+      </div>
+    </div>
+    <div class="abox amber">
+      <div class="atitle amber" data-e contenteditable="true">Recovery Plan</div>
+      <div class="atext" data-e contenteditable="true">1. ระบุ Action&#13;2. ...&#13;3. ...</div>
+    </div>`;
+  s2.appendChild(div); saveAll();
+}
+
+function addTmRow() {
+  const tbody = document.getElementById('tm-body');
+  const totalRow = document.getElementById('tm-total');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `${mkCell('J-XX')}<td class="r" data-e contenteditable="true">0</td><td class="r" data-e contenteditable="true">0</td><td class="r"><span class="pill" data-e contenteditable="true">0%</span></td><td class="r" data-e contenteditable="true">—</td><td class="r" data-e contenteditable="true">—</td><td class="r" data-e contenteditable="true">—</td><td><span class="pill" data-e contenteditable="true">—</span></td><td data-e contenteditable="true" style="font-size:10px;color:var(--muted);">ระบุ Action</td><td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td>`;
+  tbody.insertBefore(tr, totalRow); saveAll();
+}
+
+function addCoachCard() {
+  const row = document.getElementById('coach-row');
+  const div = document.createElement('div');
+  div.className = 'col card';
+  div.style.minWidth = '200px';
+  div.innerHTML = `
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ</button></div>
+    <div class="shead"><span style="color:var(--red);" data-e contenteditable="true">● TM XX — XX%</span></div>
+    <div class="abox"><div class="atitle" data-e contenteditable="true">Root Cause</div><div class="atext" data-e contenteditable="true">ระบุสาเหตุหลัก</div></div>
+    <div class="tags"><span class="tag to">Owner: <span data-e contenteditable="true">ระบุชื่อ TM</span></span><span class="tag td">Due: <span data-e contenteditable="true">—</span></span></div>`;
+  row.appendChild(div); saveAll();
+}
+
+function addGenRow(tbodyId, cols) {
+  const tbody = document.getElementById(tbodyId);
+  const tr = document.createElement('tr');
+  let html = '';
+  for (let i = 0; i < cols-1; i++) html += `<td data-e contenteditable="true">—</td>`;
+  html += `<td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td>`;
+  tr.innerHTML = html;
+  tbody.appendChild(tr); saveAll();
+}
+
+function addStratCard() {
+  const c = document.getElementById('strat-container');
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.innerHTML = `
+    <div class="card-em-bar"><button class="qe-btn red" onclick="this.closest('.card').remove();saveAll()">🗑 ลบ Card</button><button class="qe-btn blue" onclick="addStratItem(this)">+ เพิ่มข้อย่อย</button></div>
+    <div class="shead" data-e contenteditable="true">กลยุทธ์ใหม่ — ระบุชื่อ</div>
+    <div class="strat-item"><div class="strat-num" data-e contenteditable="true">1</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">หัวข้อย่อย</div><div class="strat-text" data-e contenteditable="true">รายละเอียด</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button></div>
+    <div class="tags" style="margin-top:8px;"><span class="tag to">Owner: <span data-e contenteditable="true">ระบุชื่อ</span></span><span class="tag td">Due: <span data-e contenteditable="true">—</span></span></div>`;
+  c.appendChild(div); saveAll();
+}
+
+function addStratItem(btn) {
+  const card = btn.closest('.card');
+  const div = document.createElement('div');
+  div.className = 'strat-item';
+  div.innerHTML = `<div class="strat-num" data-e contenteditable="true">•</div><div class="strat-body"><div class="strat-title" data-e contenteditable="true">หัวข้อย่อยใหม่</div><div class="strat-text" data-e contenteditable="true">รายละเอียด</div></div><button class="del-btn qe-btn red" onclick="this.closest('.strat-item').remove();saveAll()">🗑</button>`;
+  const tags = card.querySelector('.tags');
+  if (tags) card.insertBefore(div, tags); else card.appendChild(div);
+  saveAll();
+}
+
+function addYoyRow() {
+  const tbody = document.getElementById('yoy-body');
+  const tr = document.createElement('tr');
+  let html = `<td data-e contenteditable="true"><b>ปีใหม่</b></td>`;
+  for (let i = 0; i < 12; i++) html += `<td class="r" data-e contenteditable="true">—</td>`;
+  html += `<td class="r" data-e contenteditable="true"><b>—</b></td>`;
+  html += `<td class="ra"><button class="del-row-btn qe-btn red" onclick="delRow(this)">🗑</button></td>`;
+  tr.innerHTML = html; tbody.appendChild(tr); saveAll();
+}
+
+function addFootBadge() {
+  const fb = document.getElementById('foot-badges');
+  const sp = document.createElement('span');
+  sp.className = 'badge bg';
+  sp.setAttribute('data-e','');
+  sp.contentEditable = 'true';
+  sp.textContent = 'Badge ใหม่';
+  fb.insertBefore(sp, fb.lastElementChild); saveAll();
+}
+
+/* ══════ SAVE / LOAD ══════ */
+function saveAll() {
+  const snap = {};
+  ['s1','s2','s3','s4','s5','s6','s7','foot-badges'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) snap['_html_' + id] = el.innerHTML;
+  });
+  document.querySelectorAll('[data-e]').forEach((el, i) => {
+    const key = el.id || ('_e_'+i);
+    if (!el.id) el.id = key;
+    snap[key] = el.innerHTML;
+  });
+  localStorage.setItem(SK, JSON.stringify(snap));
+  showInd('✓ บันทึกแล้ว '+new Date().toLocaleTimeString('th-TH'), '#2e7d32');
+}
+
+function loadAll() {
+  // อ่าน baked data ก่อน (จากไฟล์ที่แชร์ผ่าน GitHub)
+  // ถ้าไม่มีค่อยใช้ localStorage (แก้ไขในเครื่องตัวเอง)
+  var snap = window.__BAKED__ || null;
+  if (!snap) {
+    try { var r = localStorage.getItem(SK); if (r) snap = JSON.parse(r); } catch(e) {}
+  }
+  if (!snap) return;
+  try {
+    ['s1','s2','s3','s4','s5','s6','s7','foot-badges'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && snap['_html_'+id]) el.innerHTML = snap['_html_'+id];
+    });
+    document.querySelectorAll('[data-e]').forEach(function(el, i) {
+      var key = el.id || ('_e_'+i);
+      if (snap[key] !== undefined) el.innerHTML = snap[key];
+    });
+  } catch(e) {}
+}
+
+function showInd(msg, color) {
+  const el = document.getElementById('save-ind');
+  if (!el) return;
+  el.textContent = msg; el.style.color = color||'var(--muted)';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.textContent = 'บันทึกอัตโนมัติ — แก้ไขข้อความแล้วรอสักครู่จะบันทึกเอง'; el.style.color = 'var(--muted)'; }, 3000);
+}
+
+/* ══════════════════════════════════════════════════════════
+   EXPORT HTML — บันทึก Dashboard เป็นไฟล์ HTML พร้อมข้อมูล
+   ข้อมูลที่แก้ไขแล้วถูก "อบ" เข้าไปในไฟล์โดยตรง
+   → อัปโหลด GitHub แล้วส่ง Link ได้ทันที ทุกคนเห็นข้อมูลเดียวกัน
+══════════════════════════════════════════════════════════ */
+function exportHTML() {
+  // 1. บันทึกข้อมูลปัจจุบันลง localStorage ก่อน
+  saveAll();
+
+  // 2. อ่าน JSON snapshot จาก localStorage
+  var raw = localStorage.getItem(SK);
+  if (!raw) {
+    alert('กรุณาบันทึกข้อมูลก่อนครับ (กดปุ่ม บันทึก)');
+    return;
+  }
+
+  // 3. เข้ารหัส JSON → base64 (รองรับภาษาไทยและ special chars ทุกตัว)
+  var b64 = '';
+  try {
+    b64 = btoa(unescape(encodeURIComponent(raw)));
+  } catch(e) {
+    alert('เข้ารหัสข้อมูลไม่สำเร็จ: ' + e.message);
+    return;
+  }
+
+  // 4. อ่าน HTML ปัจจุบันทั้งหน้าโดยตรง
+  //    ไม่ต้อง clone DOM — ใช้ outerHTML ได้เลย
+  var htmlOut = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+  // 5. ลบ baked script เก่าออก (ถ้ามี)
+  htmlOut = htmlOut.replace(/<script id="__baked__"[\s\S]*?<\/script>/g, '');
+
+  // 6. ลบ edit-badge floating element
+  htmlOut = htmlOut.replace(/<div id="edit-badge"[\s\S]*?<\/div>/, '');
+
+  // 7. เอา class em ออกจาก body tag
+  htmlOut = htmlOut.replace(/(<body\b[^>]*)\s+class="em"/, '$1');
+  htmlOut = htmlOut.replace(/(<body\b[^>]*)\s+class="em\s/, '$1 class="');
+
+  // 8. สร้าง baked script — ฝัง base64 data ที่จะถูกอ่านตอนเปิดไฟล์
+  var bakedScript = [
+    '<script id="__baked__">',
+    '(function(){',
+    '  try{',
+    '    var d=decodeURIComponent(escape(atob("' + b64 + '")));',
+    '    window.__BAKED__=JSON.parse(d);',
+    '  }catch(e){ console.error("baked-load:",e); }',
+    '})();',
+    '<\/script>'
+  ].join('\n');
+
+  // 9. แทรก baked script ก่อน </head>
+  if (htmlOut.indexOf('</head>') === -1) {
+    alert('ไม่พบ </head> ในไฟล์');
+    return;
+  }
+  htmlOut = htmlOut.replace('</head>', bakedScript + '\n</head>');
+
+  // 10. Download ไฟล์
+  var chip = document.querySelector('.hdr-chip b');
+  var month = chip
+    ? chip.textContent.trim().replace(/[\s\/\\]/g, '_')
+    : new Date().toISOString().slice(0, 7);
+
+  try {
+    var blob = new Blob([htmlOut], { type: 'text/html;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'dashboard_JBF_' + month + '.html';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    }, 500);
+    showInd('\u2705 บันทึกไฟล์สำเร็จ! นำไปอัปโหลด GitHub ได้เลย', '#1b5e20');
+  } catch(e) {
+    alert('ดาวน์โหลดไม่สำเร็จ: ' + e.message);
+  }
+}
+
+function exportData() {
+  const raw = localStorage.getItem(SK);
+  if (!raw) { alert('ยังไม่มีข้อมูลบันทึก'); return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([raw],{type:'application/json'}));
+  a.download = 'jbf_dashboard_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+}
+
+/* ══════ PDF EXPORT ══════ */
+function exportPDF() {
+  // 1. Set print date in footer
+  const dateEl = document.getElementById('pdf-date');
+  if (dateEl) {
+    dateEl.textContent = new Date().toLocaleDateString('th-TH', {
+      year:'numeric', month:'long', day:'numeric',
+      hour:'2-digit', minute:'2-digit'
+    });
+  }
+
+  // 2. Show ALL sections temporarily for print
+  const allSecs = document.querySelectorAll('.sec');
+  const wasActive = [];
+  allSecs.forEach(s => {
+    wasActive.push(s.classList.contains('active'));
+    s.classList.add('active');
+  });
+
+  // 3. Remove edit mode visuals if active
+  const wasEM = document.body.classList.contains('em');
+  document.body.classList.remove('em');
+
+  // 4. Show PDF title in each section
+  document.querySelectorAll('.pdf-sec-title').forEach(el => el.remove());
+  const secLabels = {
+    's1':'1 · KPI & RAG Status',
+    's2':'2 · Root Cause Analysis',
+    's3':'3 · TM Performance',
+    's4':'4 · Pet Food & ค่าใช้จ่าย',
+    's5':'5 · กลยุทธ์ & Action Plan',
+    's6':'6 · ลูกค้าใหม่ & หนี้ค้าง',
+    's7':'7 · Year-on-Year Comparison'
+  };
+  Object.entries(secLabels).forEach(([id, label]) => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const title = document.createElement('div');
+    title.className = 'pdf-sec-title';
+    title.textContent = label;
+    sec.insertBefore(title, sec.firstChild);
+  });
+
+  // 5. Print → PDF
+  setTimeout(() => {
+    window.print();
+
+    // 6. Restore original state after print dialog closes
+    setTimeout(() => {
+      allSecs.forEach((s, i) => {
+        s.classList.remove('active');
+        if (wasActive[i]) s.classList.add('active');
+      });
+      if (wasEM) document.body.classList.add('em');
+      document.querySelectorAll('.pdf-sec-title').forEach(el => el.remove());
+    }, 500);
+  }, 120);
+}
+
+function importData() {
+  const inp = document.createElement('input');
+  inp.type='file'; inp.accept='.json';
+  inp.onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => { try { JSON.parse(ev.target.result); localStorage.setItem(SK,ev.target.result); location.reload(); } catch { alert('ไฟล์ไม่ถูกต้อง'); } };
+    r.readAsText(f);
+  };
+  inp.click();
+}
+
+function resetAll() {
+  if (!confirm('ยืนยันรีเซ็ต Dashboard กลับค่าเริ่มต้น? ข้อมูลที่แก้ไขจะหายทั้งหมด')) return;
+  localStorage.removeItem(SK); location.reload();
+}
+
+/* ══════ FILE UPLOAD + CLAUDE API ══════ */
+async function handleFile(inp) {
+  const f = inp.files[0]; if (!f) return;
+  document.getElementById('upload-fn').textContent = '📄 ' + f.name;
+  const st = document.getElementById('upload-status');
+  const pg = document.getElementById('upload-prog');
+  const sm = document.getElementById('parsed-sum');
+  const ac = document.getElementById('upload-acts');
+  st.style.display = 'block'; sm.style.display='none'; ac.style.display='none';
+  pg.textContent = '⏳ กำลังอ่านไฟล์…'; pg.style.color = '#3949ab';
+  try {
+    let content = [];
+    if (f.name.endsWith('.pdf')) {
+      pg.textContent = '📄 แปลง PDF…';
+      const b64 = await toB64(f);
+      content = [{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},{type:'text',text:buildPrompt('')}];
+    } else {
+      const txt = await toText(f);
+      content = [{type:'text',text:buildPrompt(txt)}];
+    }
+    pg.textContent = '🤖 Claude กำลังวิเคราะห์…'; pg.style.color='#7b1fa2';
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content}]})
+    });
+    if (!res.ok) throw new Error('API '+res.status);
+    const data = await res.json();
+    const txt2 = data.content.map(b=>b.text||'').join('');
+    const jm = txt2.match(/```json\s*([\s\S]*?)```/) || txt2.match(/(\{[\s\S]*\})/);
+    if (!jm) throw new Error('ไม่พบ JSON ในผลลัพธ์');
+    parsedGlobal = JSON.parse(jm[1]);
+    const d = parsedGlobal;
+    const p = (a,b)=>b>0?(a/b*100).toFixed(1)+'%':'—';
+    const r = (a,b)=>{if(!b)return'';const pv=a/b*100;return pv>=95?'🟢':pv>=80?'🟡':'🔴';};
+    const f2 = n=>n>0?Number(n).toLocaleString():'—';
+    let tmStr = d.tm_data?.length ? '\nTM:\n'+d.tm_data.map(t=>`  ${t.code}: ${f2(t.actual)}/${f2(t.budget)} (${p(t.actual,t.budget)}) ${r(t.actual,t.budget)}`).join('\n') : '';
+    sm.textContent = `เดือน: ${d.month||'—'}\nGrand Total: ${f2(d.grand_total_actual)} / ${f2(d.grand_total_budget)} Tons (${p(d.grand_total_actual,d.grand_total_budget)}) ${r(d.grand_total_actual,d.grand_total_budget)}\nLivestock:   ${f2(d.livestock_actual)} / ${f2(d.livestock_budget)} (${p(d.livestock_actual,d.livestock_budget)}) ${r(d.livestock_actual,d.livestock_budget)}\nAqua:        ${f2(d.aqua_actual)} / ${f2(d.aqua_budget)} (${p(d.aqua_actual,d.aqua_budget)}) ${r(d.aqua_actual,d.aqua_budget)}\nPet Food:    ${f2(d.petfood_actual)} / ${f2(d.petfood_budget)} (${p(d.petfood_actual,d.petfood_budget)}) ${r(d.petfood_actual,d.petfood_budget)}\nMedicine:    ${f2(d.medicine_sales)} บาท${tmStr}`;
+    sm.style.display='block'; ac.style.display='flex';
+    pg.textContent='✅ อ่านข้อมูลสำเร็จ'; pg.style.color='#1b5e20';
+  } catch(err) { pg.textContent='❌ '+err.message; pg.style.color=var_red(); }
+}
+
+function var_red(){return '#c62828';}
+
+function buildPrompt(t){return `สกัดข้อมูลยอดขายจากรายงานด้านล่าง แล้วตอบเป็น JSON เท่านั้น ไม่มีข้อความอื่น:\n\`\`\`json\n{"month":"","grand_total_actual":0,"grand_total_budget":0,"livestock_actual":0,"livestock_budget":0,"aqua_actual":0,"aqua_budget":0,"petfood_actual":0,"petfood_budget":0,"medicine_sales":0,"tm_data":[{"code":"J-01","budget":0,"actual":0},{"code":"J-02","budget":0,"actual":0},{"code":"J-03","budget":0,"actual":0},{"code":"J-04","budget":0,"actual":0},{"code":"J-05","budget":0,"actual":0},{"code":"J-06","budget":0,"actual":0},{"code":"J-07","budget":0,"actual":0},{"code":"J-08","budget":0,"actual":0},{"code":"J-09","budget":0,"actual":0},{"code":"J-10","budget":0,"actual":0}],"expense_total":0}\n\`\`\`\nข้อมูล:\n${t}`;}
+
+function applyData(){
+  const d=parsedGlobal; if(!d)return;
+  // Update header chips
+  const chips=document.querySelectorAll('.hdr-chip b');
+  if(chips[0])chips[0].textContent=d.month||'—';
+  if(chips[1])chips[1].textContent=d.grand_total_actual?Number(d.grand_total_actual).toLocaleString():'—';
+  const pv=d.grand_total_budget>0?d.grand_total_actual/d.grand_total_budget*100:0;
+  if(chips[2]){chips[2].textContent=pv.toFixed(2)+'%';chips[2].style.color=pv>=95?'#a5d6a7':'#ffcdd2';}
+  saveAll(); cancelUpload();
+  showInd('🎉 อัปเดต Dashboard สำเร็จ!','#1b5e20');
+  alert('✅ อัปเดตเรียบร้อย!\nกรุณากรอก Root Cause ใน Tab 2 ด้วยครับ');
+}
+
+function cancelUpload(){
+  document.getElementById('upload-status').style.display='none';
+  document.getElementById('new-data-file').value='';
+  document.getElementById('upload-fn').textContent='ยังไม่ได้เลือกไฟล์';
+  parsedGlobal=null;
+}
+
+function toB64(f){return new Promise((ok,fail)=>{const r=new FileReader();r.onload=e=>ok(e.target.result.split(',')[1]);r.onerror=fail;r.readAsDataURL(f);});}
+function toText(f){return new Promise((ok,fail)=>{const r=new FileReader();r.onload=e=>ok(e.target.result);r.onerror=fail;r.readAsText(f,'UTF-8');});}
+
+/* ══════ INIT ══════ */
+document.addEventListener('DOMContentLoaded', () => {
+  loadAll();
+
+  // ── Start in LOCKED state (EM = false) ──
+  // Button shows "✏️ แก้ไข Dashboard" on load
+  const btn = document.getElementById('em-toggle-btn');
+  if (btn) {
+    btn.textContent = '✏️ แก้ไข Dashboard';
+    btn.style.cssText = 'padding:4px 14px;border-radius:6px;border:1.5px solid var(--navy3);background:#e8eaf6;color:var(--navy3);font-size:11px;font-family:var(--font);cursor:pointer;font-weight:700;';
+  }
+
+  // Debounced autosave on any input — only fires in EM mode
+  document.addEventListener('input', e => {
+    if (!EM) return; // ignore input events when locked
+    if (e.target.hasAttribute('data-e') || e.target.hasAttribute('contenteditable')) {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveAll, 900);
+      showInd('กำลังบันทึก…','#e65100');
+    }
+  });
+
+  // Prevent accidental editing via keyboard when locked
+  document.addEventListener('keydown', e => {
+    if (!EM && document.activeElement && document.activeElement.hasAttribute('data-e')) {
+      e.preventDefault();
+    }
+  });
+});
+</script>
+</body>
+</html>
